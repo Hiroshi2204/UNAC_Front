@@ -1,0 +1,31 @@
+# Node modules
+node_modules/
+
+# Compiled output
+dist/
+build/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.*.local
+
+# Angular build and temp files
+.angular/
+.tmp/
+out-tsc/
+
+# IDE settings
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thum
