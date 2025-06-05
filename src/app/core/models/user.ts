@@ -1,8 +1,8 @@
 export class User {
   id!: number;
+  oficina_id!: number;
   username!: string;
-  password!: string;
-  firstName!: string;
-  lastName!: string;
-  token!: string;
+  oficina!: string;
+  
+  
 }

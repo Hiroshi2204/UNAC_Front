@@ -1,51 +1,66 @@
-import { Component } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, ViewChild, HostListener } from '@angular/core';
+import { DatatableComponent, NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { RouterLink } from '@angular/router';
-import { provideNgxMask } from 'ngx-mask';
+
 
 @Component({
   selector: 'app-buscar-documento',
-  imports: [
-    RouterLink,
-        FormsModule,
-        ReactiveFormsModule,
-  ],
+  imports: [RouterLink, NgxDatatableModule],
   templateUrl: './buscar-documento.component.html',
   styleUrl: './buscar-documento.component.scss'
 })
 export class BuscarDocumentoComponent {
 
-  register!: UntypedFormGroup;
-  hide = true;
-  constructor(private fb: UntypedFormBuilder) {
-    this.initForm();
-  }
-  initForm() {
-    this.register = this.fb.group({
-      first: ['', [Validators.required, Validators.pattern('[a-zA-Z]+')]],
-      last: [''],
-      password: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(15),
-        ],
-      ],
-      email: [
-        '',
-        [Validators.required, Validators.email, Validators.minLength(5)],
-      ],
-      address: [''],
-      city: ['', [Validators.required]],
-      state: ['', [Validators.required]],
-      country: ['', [Validators.required]],
-      termcondition: [false, [Validators.requiredTrue]],
+   rows: string[] = [];
+  temp: string[] = [];
+  loadingIndicator = true;
+  reorderable = true;
+  scrollBarHorizontal = window.innerWidth < 1200;
+
+  @ViewChild('table') table!: DatatableComponent;
+
+  constructor() {
+    this.fetch((data: any) => {
+      this.temp = [...data];
+      this.rows = data;
+      setTimeout(() => {
+        this.loadingIndicator = false;
+      }, 500);
     });
   }
 
-  onRegister() {
-    console.log('Form Value', this.register.value);
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.scrollBarHorizontal = window.innerWidth < 1200;
+    this.table.recalculate();
+    this.table.recalculateColumns();
   }
 
+  getRowHeight(row: any) {
+    return row.height;
+  }
+  fetch(cb: any) {
+    const req = new XMLHttpRequest();
+    req.open('GET', `assets/data/datatable-data.json`);
+
+    req.onload = () => {
+      cb(JSON.parse(req.response));
+    };
+
+    req.send();
+  }
+
+  updateFilter(event: any) {
+    const val = event.target.value.toLowerCase();
+
+    // filter our data
+    const temp = this.temp.filter(function (d: any) {
+      return d.name.toLowerCase().indexOf(val) !== -1 || !val;
+    });
+
+    // update the rows
+    this.rows = temp;
+    // Whenever the filter changes, always go back to the first page
+    this.table.offset = 0;
+  }
 }

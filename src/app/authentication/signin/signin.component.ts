@@ -27,44 +27,40 @@ export class SigninComponent implements OnInit {
   ) { }
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
-      username: ['admin@email.com', Validators.required],
-      password: ['admin@123', Validators.required],
+      username: ['admin@email.com'],
+      password: ['admin@123'],
       
     });
   }
+
+  
   get f() {
     return this.loginForm.controls;
   }
   onSubmit() {
     this.submitted = true;
     this.error = '';
-
-    if (this.loginForm.invalid) {
-      this.error = 'Username and Password not valid !';
-      return;
-    } else {
-      this.authService
+    console.log('Submit triggered');
+    //if (this.loginForm.invalid) {
+      //this.error = 'Usuario o Contraseña invalido !';
+      //return;
+    //} else {
+    this.authService
         .login(this.f['username'].value, this.f['password'].value)
-        .subscribe({
-          next: (res) => {
+        .subscribe(
+          (res) => {
             if (res) {
-              if (res) {
-                const token = this.authService.currentUserValue.token;
-                if (token) {
-                  this.router.navigate(['/apps/subir-documento']);
-                }
-              } else {
-                this.error = 'Invalid Login';
-              }
+              this.router.navigate(['/dashboard/main']); 
             } else {
-              this.error = 'Invalid Login';
+              this.error = 'Usuario o Contraseña Inválida';
             }
-          },
-          error: (error) => {
-            this.error = error;
             this.submitted = false;
           },
-        });
+          (error) => {
+            this.error = "Usuario o Contraseña Inválida";
+            this.submitted = false;
+          }
+        );
     }
-  }
 }
+
