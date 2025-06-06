@@ -16,7 +16,13 @@ export class SubirDocumentoComponent {
 
   constructor(private fb: FormBuilder, private docService: DocService) {
     this.documentoForm = this.fb.group({
-      pdf: [null]
+      nombre: ['', Validators.required],
+      numero: ['', Validators.required],
+      anio: ['', Validators.required],
+      clase_documento_id: ['', Validators.required],
+      fecha_doc: ['', Validators.required],
+      asunto: ['', Validators.required],
+      resumen: [''], // opcional
     });
   }
 
@@ -31,7 +37,22 @@ export class SubirDocumentoComponent {
       alert('Debes seleccionar un archivo PDF.');
       return;
     }
+
+    const formValues = this.documentoForm.value;
     const formData = new FormData();
+
+    // Agregar todos los campos del formulario
+    for (const key in formValues) {
+      if (formValues.hasOwnProperty(key)) {
+        const value = formValues[key];
+        if (key === 'resumen' && !value) {
+          continue; // omitir si está vacío
+        }
+        formData.append(key, value);
+      }
+    }
+
+    // Agregar el archivo
     formData.append('pdf', this.pdfFile);
 
     this.docService.subirDocumento(formData).subscribe({
