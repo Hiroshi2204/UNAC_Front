@@ -25,24 +25,24 @@ export class AuthService {
     return this.currentUserSubject.value;
   }
 
-  login(username: string, password: string) {
-    return this.http
-      .post<any>(`${environment.apiUrl}/api/login`, {
-        username,
-        password,
-      })
-      .pipe(
-        map((user) => {
-          // store user details and jwt token in local storage to keep user logged in between page refreshes
-          // console.log(JSON.stringify(user));
-          localStorage.setItem('token', user.token);
-          localStorage.setItem('currentUser', JSON.stringify(user));
-         //ocalStorage.setItem('extraUser', JSON.stringify(user.persona_natural_id));
-          
-          
-          this.currentUserSubject.next(user);
-          return user;
+    login(username: string, password: string) {
+      return this.http
+        .post<any>(`${environment.apiUrl}/api/login`, {
+          username,
+          password,
         })
+        .pipe(
+          map((user) => {
+            // store user details and jwt token in local storage to keep user logged in between page refreshes
+            // console.log(JSON.stringify(user));
+            localStorage.setItem('token', user.token);
+            localStorage.setItem('currentUser', JSON.stringify(user));
+          //ocalStorage.setItem('extraUser', JSON.stringify(user.persona_natural_id));
+            
+            
+            this.currentUserSubject.next(user);
+            return user;
+          })
       );
   }
   ok(body?: {
