@@ -13,6 +13,7 @@ import {
 import { ConfigService } from '../../config/config.service';
 import { NgScrollbar } from 'ngx-scrollbar';
 import { InConfiguration, RightSidebarService } from '@core';
+import { NgOptimizedImage } from '@angular/common';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,20 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
 import { DocService } from '@core/service/doc.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-subir-documento',
-  imports: [FormsModule, ReactiveFormsModule],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule],
   templateUrl: './subir-documento.component.html',
   styleUrl: './subir-documento.component.scss'
 })
 
 
-export class SubirDocumentoComponent {
+export class SubirDocumentoComponent implements OnInit {
+  tiposDocumento: any[] = [];
   documentoForm: FormGroup;
   pdfFile: File | null = null;
 
   constructor(private fb: FormBuilder, private docService: DocService) {
+
+
     this.documentoForm = this.fb.group({
       nombre: ['', Validators.required],
       numero: ['', Validators.required],
@@ -25,6 +29,24 @@ export class SubirDocumentoComponent {
       resumen: [''], // opcional
     });
   }
+
+   ngOnInit(): void {
+    this.cargarTiposDocumento();
+  }
+
+  cargarTiposDocumento() {
+  this.docService.getTipoDoc().subscribe({
+    next: (res) => {
+      console.log('Respuesta de API:', res); // Confirmar formato
+      this.tiposDocumento = res.documentos;  // 👈 Usa el array correcto
+      console.log(this.tiposDocumento)
+    },
+    error: (err) => {
+      console.error('Error cargando tipos de documento', err);
+      alert('Error al cargar tipos de documento');
+    }
+  });
+}
 
   onFileChange(event: any) {
     if (event.target.files && event.target.files.length > 0) {
@@ -55,7 +77,7 @@ export class SubirDocumentoComponent {
     // Agregar el archivo
     formData.append('pdf', this.pdfFile);
 
-    this.docService.subirDocumento(formData).subscribe({
+    this.docService.subirDoc(formData).subscribe({
       next: res => {
         alert('Documento subido correctamente');
         this.documentoForm.reset();

@@ -2,8 +2,8 @@
   <!-- Left Sidebar -->
   <aside id="leftsidebar" class="sidebar main-sidebar" (mouseenter)="mouseHover()" (mouseleave)="mouseOut()">
     <div class="sidebar-brand">
-      <a routerLink="/dashboard/main"> <img alt="image" src="assets/images/logo.png" class="header-logo" /> <span
-      class="logo-name">Oreva</span>
+      <a routerLink="/dashboard/main"> <span
+      class="logo-name">UNAC</span>
     </a>
   </div>
   <!-- Menu -->
@@ -13,12 +13,12 @@
         <li class="sidebar-user-panel">
           <div class="user-panel">
             <div class=" image">
-              <img src="assets/images/user.png" class="img-circle user-img-circle" alt="User Image" />
+              <img src="assets/images/unac.png" class="img-circle user-img-circle" alt="User Image" />
             </div>
           </div>
           <div class="profile-usertitle">
-            <div class="sidebar-userpic-name">Emily Smith </div>
-            <div class="profile-usertitle-job ">{{'MENUITEMS.USER.POST' | translate}} </div>
+            <div class="sidebar-userpic-name"> {{nombre_oficina}}</div>
+            
           </div>
         </li>
         <!-- Top Most level menu -->

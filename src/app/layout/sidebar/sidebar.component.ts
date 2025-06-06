@@ -34,6 +34,7 @@ import { SidebarService } from './sidebar.service';
   ],
 })
 export class SidebarComponent implements OnInit, OnDestroy {
+  nombre_oficina : any;
   public sidebarItems!: RouteInfo[];
   public innerHeight?: number;
   public bodyTag!: HTMLElement;
@@ -94,6 +95,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this.sidebarItems = routes.filter((sidebarItem) => sidebarItem);
       });
     }
+
+    this.nombre_oficina = this.getNombreUsuario();
+    if (this.nombre_oficina) {
+      console.log('Nombre de usuario:', this.nombre_oficina);
+    } else {
+      console.log('No se pudo obtener el nombre de usuario.');
+    }
+
     this.initLeftSidebar();
     this.bodyTag = this.document.body;
   }
@@ -144,4 +153,19 @@ export class SidebarComponent implements OnInit, OnDestroy {
       this.renderer.addClass(this.document.body, 'sidebar-gone');
     }
   }
+
+  getNombreUsuario(): string | null {
+  try {
+    const userData = localStorage.getItem('currentUser'); // Cambia 'usuario' si usas otra clave
+    if (!userData) {
+      return null;
+    }
+
+    const user = JSON.parse(userData);
+    return user.oficina.nombre || null;
+  } catch (error) {
+    console.error('Error al leer el usuario desde localStorage:', error);
+    return null;
+  }
+}
 }

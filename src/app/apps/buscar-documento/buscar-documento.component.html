@@ -1,98 +1,105 @@
+<div style="padding-top: 15px;">
+
+
+</div>
 <section class="main-content">
-  <ul class="breadcrumb breadcrumb-style ">
-    <li class="breadcrumb-item">
-      <h5 class="page-title m-b-0">Filtering</h5>
-    </li>
-    <li class="breadcrumb-item bcrumb-1">
-      <a routerLink="/dashboard/main">
-        <i class="fas fa-home font-17"></i></a>
-      </li>
-      <li class="breadcrumb-item">Data Table</li>
-      <li class="breadcrumb-item">Filtering</li>
-    </ul>
-    <div class="section-body">
-      <div class="row">
-        <div class="col-12 col-md-12 col-lg-12">
-          <div class="card">
-            <div class="card-header">
-              <h4>Search and Filtering</h4>
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-sm-12">
-                  <div class="form-group row">
-                    <div class="col-sm-4">
-                      <div class="d-flex">
-                        <label class="col-form-label msr-3">Search:</label>
-                        <input type="text" class="form-control" (keyup)='updateFilter($event)'>
-                        </div>
-                      </div>
-                    </div>
-                    <ngx-datatable #table class="material" [rows]="rows" [loadingIndicator]="loadingIndicator"
-                      columnMode="force" [headerHeight]="50" [footerHeight]="50" rowHeight="auto" [limit]="10"
-                      [scrollbarH]="scrollBarHorizontal" [reorderable]="reorderable">
-                      <ngx-datatable-column [width]="200" name="Name">
-                        <ng-template let-row="row" let-value="value" let-i="index" ngx-datatable-cell-template>
-                          <img src="{{ row.img }}" class="data-table-img" />
-                          <div class="name-col-style">
-                            <div>{{row.name}}</div>
-                            <div class="font-12 text-muted">{{row.designation}}</div>
-                          </div>
-                        </ng-template>
-                      </ngx-datatable-column>
-                      <ngx-datatable-column name="Gender">
-                        <ng-template let-row="row" ngx-datatable-cell-template>
-                          {{row.gender}}
-                        </ng-template>
-                      </ngx-datatable-column>
-                      <ngx-datatable-column name="Phone">
-                        <ng-template let-row="row" ngx-datatable-cell-template>
-                          {{row.phone}}
-                        </ng-template>
-                      </ngx-datatable-column>
-                      <ngx-datatable-column name="Email">
-                        <ng-template let-row="row" ngx-datatable-cell-template>
-                          {{row.email}}
-                        </ng-template>
-                      </ngx-datatable-column>
-                      <ngx-datatable-column name="Status">
-                        <ng-template let-row="row" ngx-datatable-cell-template>
-                          @if (row.status==='Active') {
-                            <div class="badge-outline col-green">{{row.status}}
-                            </div>
-                          }
-                          @if (row.status==='Completed') {
-                            <div class="badge-outline col-red">{{row.status}}
-                            </div>
-                          }
-                          @if (row.status==='Pending') {
-                            <div class="badge-outline col-indigo">{{row.status}}
-                            </div>
-                          }
-                        </ng-template>
-                      </ngx-datatable-column>
-                      <ngx-datatable-column name="Address">
-                        <ng-template let-row="row" ngx-datatable-cell-template>
-                          {{row.address}}
-                        </ng-template>
-                      </ngx-datatable-column>
-                      <ngx-datatable-column name="Actions" [sortable]="false">
-                        <ng-template let-value="value" let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
-                          <a class="msr-2 h-auto tblEditBtn">
-                            <i class="fas fa-pen"></i>
-                          </a>
-                          <a class="h-auto tblDelBtn">
-                            <i class="far fa-trash-alt"></i>
-                          </a>
-                        </ng-template>
-                      </ngx-datatable-column>
-                    </ngx-datatable>
-                  </div>
-                </div>
+  <div class="section-body">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h4>Buscar Documento</h4>
+          </div>
+          <div class="card-body">
+            <div class="row align-items-end mb-3">
+              <div class="col-md-6">
+                <label for="termino">Buscar documento</label>
+                <input
+                  [(ngModel)]="terminoBusqueda"
+                  name="termino"
+                  type="text"
+                  class="form-control"
+                  placeholder="Escriba el nombre o asunto"
+                />
+              </div>
+              <div class="col-md-2">
+                <button class="btn btn-primary" (click)="buscarDocumento(1)">
+                  Buscar
+                </button>
               </div>
             </div>
+
+            <div *ngIf="dataLoaded; else initialMessage">
+            <div *ngIf="rows.length > 0; else noDataTemplate">
+
+               <ngx-datatable
+              #table
+              class="bootstrap"
+              [rows]="rows"
+              [columns]="[]"
+              [columnMode]="'force'"
+              [headerHeight]="50"
+              [footerHeight]="50"
+              [rowHeight]="'auto'"
+              [scrollbarH]="scrollBarHorizontal"
+              [count]="totalItems"
+              [limit]="itemsPorPagina"
+              [offset]="paginaActual - 1"
+              (page)="onPageChange($event)"
+            >
+              <ngx-datatable-column name="Nombre del documento">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row.nombre }}
+                </ng-template>
+              </ngx-datatable-column>
+
+              <ngx-datatable-column name="Número documento">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row.num_anio}}
+                </ng-template>
+              </ngx-datatable-column>
+
+              <ngx-datatable-column name="Asunto">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row.asunto }}
+                </ng-template>
+              </ngx-datatable-column>
+
+              <ngx-datatable-column name="Archivo PDF">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  {{ row.nombre_original_pdf || 'No disponible' }}
+                </ng-template>
+              </ngx-datatable-column>
+
+              <ngx-datatable-column name="Acciones" [sortable]="false" [canAutoResize]="false" [width]="150">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  <button class="btn btn-sm btn-primary me-1" (click)="descargarDoc(row.id, row.nombre_original_pdf)">
+                    <i class="fa fa-download"></i>
+                  </button>
+                  <button class="btn btn-sm btn-danger" (click)="eliminarDocumento(row.id)" >
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </ng-template>
+              </ngx-datatable-column>
+            </ngx-datatable>
+
+              </div>
+              </div>
+
+              <ng-template #initialMessage>
+  <p>Por favor ingrese un término de búsqueda y haga clic en Buscar.</p>
+</ng-template>
+
+<ng-template #noDataTemplate>
+  <p>No se encontraron documentos para el término "{{ terminoBusqueda }}".</p>
+</ng-template>
+           
+
+
+
           </div>
         </div>
       </div>
-    </section>
-    
+    </div>
+  </div>
+</section>
