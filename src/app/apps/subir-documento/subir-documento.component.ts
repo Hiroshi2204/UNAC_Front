@@ -37,8 +37,8 @@ export class SubirDocumentoComponent implements OnInit {
   cargarTiposDocumento() {
   this.docService.getTipoDoc().subscribe({
     next: (res) => {
-      console.log('Respuesta de API:', res); // Confirmar formato
-      this.tiposDocumento = res.documentos;  // 👈 Usa el array correcto
+      console.log('Respuesta de API:', res);
+      this.tiposDocumento = res.documentos;
       console.log(this.tiposDocumento)
     },
     error: (err) => {

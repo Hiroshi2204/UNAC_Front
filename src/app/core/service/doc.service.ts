@@ -31,7 +31,7 @@ export class DocService {
     return this.http.get<any>(`${environment.apiUrl}/api/documentos/buscar`, { params });}
 
   eliminarDoc(id:any): Observable<any> { 
-    return this.http.post<any>(`${environment.apiUrl}/api/documentos/buscar`, id);
+    return this.http.post<any>(`${environment.apiUrl}/api/documentos/eliminar`, { id });
 
   }
 
