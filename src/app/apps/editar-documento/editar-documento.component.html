@@ -1,0 +1,61 @@
+<div style="padding-top: 15px;">
+
+
+</div>
+<section class="main-content">
+
+  <div class="section-body">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h4>Editar Oficio</h4>
+          </div>
+          <div *ngIf="loadingIndicator" class="d-flex justify-content-center align-items-center"
+              style="height: 200px;">
+              <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                <span class="visually-hidden">Cargando...</span>
+              </div>
+          </div>
+          <div class="card-body">
+            <div *ngIf="oficios && oficios.length > 0; else noOficios">
+            <table class="table table-bordered">
+                <thead class="text-center">
+                <tr>
+                    <th>Numero</th>
+                    <th>Código</th>
+                    <th>Archivo PDF</th>
+                    <th class="text-center">Estado</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let oficio of oficios">
+                    <td>{{ oficio.numero }}</td>
+                    <td>{{ oficio.codigo }}</td>
+                    <td>{{ oficio.nombre_original_pdf }}</td>
+                    <td class="text-center">{{ oficio.estado_publicacion ? 'Publicado' : 'No Publicado' }}</td>
+                    <th class="text-center">
+                        <button
+                          mat-raised-button
+                          color="primary"
+                          class="btn btn-warning text-white"
+                          (click)="abrirOficio(oficio)"
+                          [disabled]="oficio.estado_publicacion"
+                        >
+                          <i class="fas fa-edit"></i>
+                        </button>
+                    </th>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+            <ng-template #noOficios>
+            <p>No hay oficios para mostrar.</p>
+            </ng-template>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

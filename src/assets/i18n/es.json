@@ -9,7 +9,7 @@
       "POST": "Gerente"
     },
     "MAIN": {
-      "TEXT": "-- Principal"
+      "TEXT": "--> Principal"
     },
 
     "SUBIR DOCUMENTO" : {
@@ -18,6 +18,13 @@
 
     "BUSCAR DOCUMENTO" : {
       "TEXT": "Buscar Documento"
+    },
+
+    "CARGAR DOCUMENTO" : {
+      "TEXT": "Subir Oficio"
+    },
+    "EDITAR DOCUMENTO" : {
+      "TEXT": "Editar Oficio"
     },
     
     "HOME": {
@@ -84,3 +91,5 @@
     }
   }
 }
+
+

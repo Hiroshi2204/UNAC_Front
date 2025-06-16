@@ -13,23 +13,38 @@
             
             <form [formGroup]="documentoForm" (ngSubmit)="onSubmit()">
               <div class="row">
+
+                <div class="col-md-4 form-group">
+                <label>Clase Documento</label>
+                <select formControlName="clase_documento_id" class="form-select form-control"
+                 [ngClass]="{'is-invalid': documentoForm.get('clase_documento_id')?.invalid && documentoForm.get('clase_documento_id')?.touched}" >
+                  <option value="">Seleccione una opción</option>
+                  <option *ngFor="let tipo of tiposDocumento" [ngValue]="tipo.id">{{ tipo.nombre }}</option>
+                  
+                </select>
+              </div>
+
                 <div class="col-md-4 form-group">
                   <label>Nombre</label>
                   <input formControlName="nombre" type="text" class="form-control"
                   [ngClass]="{'is-invalid': documentoForm.get('nombre')?.invalid && documentoForm.get('nombre')?.touched}"  />
                   
                 </div>
-                <div class="col-md-1 form-group">
+                <div class="col-md-2 form-group">
                   <label>Número</label>
                   <input formControlName="numero" type="text" class="form-control" 
                    [ngClass]="{'is-invalid': documentoForm.get('numero')?.invalid && documentoForm.get('numero')?.touched}"/>
                 </div>
+                <div *ngIf="numeroExistenteMensaje" class="text-danger mt-1" style="font-size: 0.875rem;">
+                  {{ numeroExistenteMensaje }}
+                </div>
+                
 
-                <div class="col-md-1 form-group">
+                <!-- <div class="col-md-1 form-group">
                   <label>Año</label>
                   <input formControlName="anio" type="text" class="form-control"
                   [ngClass]="{'is-invalid': documentoForm.get('anio')?.invalid && documentoForm.get('anio')?.touched}"  />
-                </div>
+                </div> -->
 
                 <div class="col-md-2 form-group">
                   <label>Fecha Documento</label>
@@ -37,15 +52,7 @@
                   [ngClass]="{'is-invalid': documentoForm.get('fecha_doc')?.invalid && documentoForm.get('fecha_doc')?.touched}" />
                 </div>
 
-                <div class="col-md-4 form-group">
-                <label>Clase Documento</label>
-                <select formControlName="clase_documento_id" class="form-select form-control"
-                 [ngClass]="{'is-invalid': documentoForm.get('clase_documento_id')?.invalid && documentoForm.get('clase_documento_id')?.touched}">
-                  <option value="">Seleccione una opción</option>
-                  <option *ngFor="let tipo of tiposDocumento" [ngValue]="tipo.id">{{ tipo.nombre }}</option>
-                  
-                </select>
-              </div>
+                
 
               </div>
 
@@ -76,6 +83,8 @@
               <div class="card-footer text-end">
                 <button type="submit" class="btn btn-primary" [disabled]="documentoForm.invalid">Enviar</button>
               </div>
+
+              
             </form>
           </div>
         </div>

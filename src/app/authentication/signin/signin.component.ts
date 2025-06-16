@@ -27,8 +27,8 @@ export class SigninComponent implements OnInit {
   ) { }
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
-      username: [''],
-      password: [''],
+      username: ['admin@email.com'],
+      password: ['admin@123'],
       
     });
   }
@@ -41,6 +41,7 @@ export class SigninComponent implements OnInit {
     this.submitted = true;
     this.error = '';
     console.log('Submit triggered');
+    this.loading = true;
     //if (this.loginForm.invalid) {
       //this.error = 'Usuario o Contraseña invalido !';
       //return;
@@ -50,7 +51,7 @@ export class SigninComponent implements OnInit {
         .subscribe(
           (res) => {
             if (res) {
-              this.router.navigate(['/dashboard/main']); 
+              this.router.navigate(['/apps/subir-documento']); 
             } else {
               this.error = 'Usuario o Contraseña Inválida';
             }
@@ -62,5 +63,6 @@ export class SigninComponent implements OnInit {
           }
         );
     }
+    loading = false;
 }
 

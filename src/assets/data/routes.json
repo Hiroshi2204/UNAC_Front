@@ -24,6 +24,28 @@
       "submenu": []
     },
     {
+      "path": "apps/cargar-documento",
+      "title": "MENUITEMS.CARGAR DOCUMENTO.TEXT",
+      "iconType": "feather",
+      "icon": "upload",
+      "class": "",
+      "groupTitle": false,
+      "badge": "",
+      "badgeClass": "",
+      "submenu": []
+    },
+    {
+      "path": "apps/editar-documento",
+      "title": "MENUITEMS.EDITAR DOCUMENTO.TEXT",
+      "iconType": "feather",
+      "icon": "edit",
+      "class": "",
+      "groupTitle": false,
+      "badge": "",
+      "badgeClass": "",
+      "submenu": []
+    },
+    {
       "path": "apps/buscar-documento",
       "title": "MENUITEMS.BUSCAR DOCUMENTO.TEXT",
       "iconType": "feather",
@@ -34,6 +56,8 @@
       "badgeClass": "",
       "submenu": []
     }
+    
+    
 
    
     

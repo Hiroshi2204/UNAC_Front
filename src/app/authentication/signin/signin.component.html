@@ -16,9 +16,9 @@
                 <div class="row">
                   <div class="col-lg-12">
                     <div class="form-group position-relative">
-                      <label>Usuario <span class="text-danger">*</span></label>
+                      <label>Correo <span class="text-danger">*</span></label>
                       <i-feather name="user" class="login-icons"></i-feather>
-                      <input type="text" class="form-control psl-5" formControlName="username" placeholder="user">
+                      <input type="email" class="form-control psl-5" formControlName="username" placeholder="Email">
                       </div>
                     </div>
                     <div class="col-lg-12">
@@ -29,7 +29,7 @@
                           placeholder="Password">
                         </div>
                       </div>
-                      <!-- <div class="col-lg-12">
+                      <div class="col-lg-12">
                         <div class="d-flex justify-content-between">
                           <div class="form-group">
                             <div class="form-check">
@@ -39,21 +39,24 @@
                             <p class="forgot-pass mb-0"><a routerLink="/authentication/forgot"
                             class="text-dark fw-bold">Olvidé mi Contraseña</a></p>
                           </div>
-                        </div> -->
+                        </div>
                         @if (error) {
                           <div class="alert alert-danger mb-3 msl-3">{{error}}</div>
                         }
                         <div class="col-lg-12 mb-0">
-                          <button type="submit" class="btn btn-primary auth-form-btn">Sign in</button>
+                          <button type="submit" class="btn btn-primary auth-form-btn">Iniciar Sesión</button>
 
                         </div>
-                        
-                        
                     </div>
                   </form>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+        <div *ngIf="loading" class="loading-overlay d-flex justify-content-center align-items-center">
+          <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+            <span class="visually-hidden">Cargando...</span>
           </div>
         </div>
       </main>

@@ -1,0 +1,190 @@
+<section class="main-content">
+  <div class="section-body">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h4>Subir Oficio con Resoluciones</h4>
+          </div>
+          <div class="card-body">
+
+            <!-- FORMULARIO -->
+            <form [formGroup]="documentoForm">
+              <div *ngIf="pasoActual === 1">
+                <h5>Datos del Oficio</h5>
+                <div formGroupName="oficio">
+                  <div class="row">
+                    <div class="col-md-2 form-group">
+                      <label>Detalle del Oficio</label>
+                      <input formControlName="numero" type="text" class="form-control"
+                        [ngClass]="{'is-invalid': oficioForm.get('numero')?.invalid && oficioForm.get('numero')?.touched}" />
+                      <div class="invalid-feedback" *ngIf="oficioForm.get('numero')?.invalid && oficioForm.get('numero')?.touched">
+                        Número obligatorio
+                      </div>
+
+                      <span *ngIf="numeroExistenteMensajeOficio" class="text-danger mt-1" style="font-size: 0.875rem;">
+                            {{ numeroExistenteMensajeOficio }}
+                        </span>
+
+                    </div>
+                    <div class="col-md-6 form-group">
+                      <label>Archivo del Oficio (PDF)</label>
+                      <input type="file" accept="application/pdf" (change)="onFileChange($event)" class="form-control" />
+                    </div>
+                    <div class="col-md-2 form-group">
+                      <label>N° de Resoluciones</label>
+                      <!-- Aquí tienes que poner un formControlName para el número de resoluciones -->
+                      <input formControlName="cantidad_resoluciones" type="number" class="form-control"
+                        [ngClass]="{'is-invalid': documentoForm.get('oficio.cantidad_resoluciones')?.invalid && documentoForm.get('oficio.cantidad_resoluciones')?.touched}" />
+                      <div class="invalid-feedback" *ngIf="documentoForm.get('oficio.cantidad_resoluciones')?.invalid && documentoForm.get('oficio.cantidad_resoluciones')?.touched">
+                        Debe ingresar una cantidad válida
+                      </div>
+                    </div>
+                    <div class="col-md-2 form-group">
+                      <label>Fecha de Registro del Oficio</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        [value]="fechaHoy"
+                        readonly
+                      />
+                    </div>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-success" (click)="agregarResolucionesSegunCantidad()">
+                  Aceptar
+                </button>
+
+                
+
+                <div class="tab-content mt-3">
+                  <div *ngFor="let res of resoluciones.controls; let i = index" [formGroup]="res" [hidden]="activeTab !== i">
+                    <!-- Resoluciones -->
+                    <h5 class="mt-4">Datos de las Resoluciones</h5>
+                    <ul class="nav nav-tabs">
+                      <li class="nav-item" *ngFor="let res of resoluciones.controls; let i = index">
+                        <a class="nav-link text-dark" [class.active]="i === activeTab"
+                          [ngClass]="{'custom-tab-active': i === activeTab}" (click)="activeTab = i">
+                          Resolución {{ i + 1 }}
+                        </a>
+                      </li>
+                    </ul>
+                    <h6 class="text-dark">Resolución {{ i + 1 }}</h6>
+                    <div class="row">
+                      <div class="col-md-4 form-group">
+                        <label>Clase Documento</label>
+                        <select formControlName="clase_documento_id" class="form-select form-control"
+                          [ngClass]="{'is-invalid': res.get('clase_documento_id')?.invalid && res.get('clase_documento_id')?.touched}">
+                          <option value="">Seleccione una opción</option>
+                          <option *ngFor="let tipo of tiposDocumento" [value]="tipo.id">{{ tipo.nombre }}</option>
+                        </select>
+                        <div class="invalid-feedback" *ngIf="res.get('clase_documento_id')?.invalid && res.get('clase_documento_id')?.touched">
+                          Campo obligatorio
+                        </div>
+                      </div>
+
+                      <div class="col-md-4 form-group">
+                        <label>Nombre</label>
+                        <input formControlName="nombre" type="text" class="form-control"
+                          [ngClass]="{'is-invalid': res.get('nombre')?.invalid && res.get('nombre')?.touched}" />
+                        <div class="invalid-feedback" *ngIf="res.get('nombre')?.invalid && res.get('nombre')?.touched">
+                          Campo obligatorio
+                        </div>
+                      </div>
+
+                      <div class="col-md-2 form-group">
+                        <label>Número</label>
+                        <input formControlName="numero" type="number" class="form-control"
+                          [ngClass]="{'is-invalid': res.get('numero')?.invalid && res.get('numero')?.touched}" />
+                        <div class="invalid-feedback" *ngIf="res.get('numero')?.invalid && res.get('numero')?.touched">
+                          Campo obligatorio
+                        </div>
+                        <span *ngIf="numeroExistenteMensaje" class="text-danger mt-1" style="font-size: 0.875rem;">
+                            {{ numeroExistenteMensaje }}
+                        </span>
+                      </div>
+
+                      <div class="col-md-2 form-group">
+                        <label>Fecha</label>
+                        <input formControlName="fecha" type="date" class="form-control"
+                          [ngClass]="{'is-invalid': res.get('fecha')?.invalid && res.get('fecha')?.touched}" />
+                        <div class="invalid-feedback" *ngIf="res.get('fecha')?.invalid && res.get('fecha')?.touched">
+                          Campo obligatorio
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-4 form-group">
+                        <label>Resumen</label>
+                        <textarea formControlName="resumen" class="form-control"
+                          [ngClass]="{'is-invalid': res.get('resumen')?.invalid && res.get('resumen')?.touched}"></textarea>
+                      </div>
+                      <div class="col-md-8 form-group">
+                        <label>Detalle</label>
+                        <textarea formControlName="detalle" class="form-control"
+                          [ngClass]="{'is-invalid': res.get('detalle')?.invalid && res.get('detalle')?.touched}"></textarea>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-12 form-group">
+                        <label>Archivo PDF de la Resolución</label>
+                        <input type="file" accept="application/pdf" (change)="onResolucionFileChange($event, i)" class="form-control" />
+                      </div>
+                    </div>
+
+                    <!-- <div class="text-end">
+                      <button type="button" class="btn btn-danger btn-sm" (click)="eliminarResolucion(i)">Eliminar</button>
+                    </div> -->
+
+                    <div class="text-end">
+                      <button type="button" class="btn btn-primary btn-lg" (click)="prueba_imprimir()">Subir Documento</button>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              <!-- PASO 2: RESUMEN -->
+              <div *ngIf="pasoActual === 2">
+                <h5 class="text-dark">Resumen de Resoluciones</h5>
+                <table class="table table-sm">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Número</th>
+                      <th>Fecha</th>
+                      <th>Resumen</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let res of documentoForm.value.resoluciones; let i = index">
+                      <td>{{ i + 1 }}</td>
+                      <td>{{ res.numero }}</td>
+                      <td>{{ res.fecha }}</td>
+                      <td>{{ res.resumen }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- NAVEGACIÓN -->
+              <!-- <div class="row mt-4">
+                <div class="col-12 d-flex justify-content-between">
+                  <button *ngIf="pasoActual > 1" class="btn btn-secondary" (click)="pasoActual = pasoActual - 1">Anterior</button>
+                  <div class="ms-auto">
+                    <button *ngIf="pasoActual < 2" class="btn btn-primary" (click)="mostrarResumen()">Siguiente</button>
+                    <button *ngIf="pasoActual === 2" class="btn btn-success" (click)="mostrarResumen()">Confirmar y Enviar</button>
+                  </div>
+                </div>
+              </div> -->
+
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

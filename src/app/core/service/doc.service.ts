@@ -25,13 +25,14 @@ export class DocService {
   }
 
 
-  buscarDoc(q: any, page: any): Observable<any> {
-  const params = {...q,page: page};
+  buscarDoc( nombre : any, numero:any, resumen:any, detalle:any, fecha_doc:any, oficina_id:any, page: any): Observable<any> {
+  const params = { nombre:nombre, numero:numero,resumen:resumen,detalle:detalle,fecha_doc:fecha_doc,oficina_id:oficina_id, page: page};
 
-    return this.http.get<any>(`${environment.apiUrl}/api/documentos/buscar`, { params });}
+    return this.http.get<any>(`${environment.apiUrl}/api/documentos/buscar/busqueda_documentos_parametros`, { params });}
+
 
   eliminarDoc(id:any): Observable<any> { 
-    return this.http.post<any>(`${environment.apiUrl}/api/documentos/eliminar`, { id });
+    return this.http.post<any>(`${environment.apiUrl}/api/documentos/eliminar`, {id});
 
   }
 
@@ -41,6 +42,40 @@ export class DocService {
     responseType: 'blob'
   });
 }
+
+ getResolucionesPorOficina(clase_documento_id: any): Observable<any> {
+  return this.http.get<any>(`${environment.apiUrl}/api/documentos/get/documentos`, {
+    params: { clase_documento_id: clase_documento_id }
+  });
+}
+
+getOficinas(oficina_id:any): Observable<any> {
+  return this.http.get<any>(`${environment.apiUrl}/api/documentos/get_oficinas`, {
+    params: { oficina_id: oficina_id }
+  });
+}
+
+cargar_documentos(data:FormData): Observable<any>{
+  return this.http.post<any>(`${environment.apiUrl}/api/documentos/creacion_oficios_documentos`, data);
+  }
+
+
+getOficios(): Observable<any> {
+  return this.http.get<any>(`${environment.apiUrl}/api/documentos/get/oficio`);
+}
+
+getOficios1(): Observable<any> {
+  return this.http.get<any>(`${environment.apiUrl}/api/oficios/get`);
+}
+
+// getOficiosid(id:any): Observable<any> { 
+//     return this.http.post<any>(`${environment.apiUrl}/api/oficios/get_id`, {id});
+
+  //}
+  getOficiosid(): Observable<any> {
+  return this.http.get<any>(`${environment.apiUrl}/api/oficios/get_id`);
+}
+
 
 
 
