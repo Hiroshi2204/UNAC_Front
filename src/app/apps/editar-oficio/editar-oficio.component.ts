@@ -1,159 +1,87 @@
-import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormArray, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DocService } from '@core/service/doc.service';
+import { ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-editar-oficio',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './editar-oficio.component.html',
-  styleUrls: ['./editar-oficio.component.scss']
+  styleUrls: ['./editar-oficio.component.scss'],
+  imports: [
+    ReactiveFormsModule,CommonModule, FormsModule
+    // otros módulos
+  ]
 })
 export class EditarOficioComponent implements OnInit {
-  documentoForm!: FormGroup;
+  oficioForm!: FormGroup;
   oficio: any;
+  id!: number;
+  documentosRelacionados: any[] = [];
   oficioFile: File | null = null;
+  fechaHoy: string = '';
   resolucionFiles: File[] = [];
   activeTab: number = 0;
   pasoActual: number = 1;
-  tiposDocumento: any[] = [];
   documentos_existentes: any[] = [];
-  oficios_existentes: any[] = [];
   numeroExistenteMensaje: string = '';
   numeroExistenteMensajeOficio: string = '';
-  fechaHoy: string = '';
+  tiposDocumento: any[] = [];
+  
 
-  constructor(private router: Router, private fb: FormBuilder, private docService: DocService) {
-    const nav = this.router.getCurrentNavigation();
-    this.oficio = nav?.extras?.state?.['oficio'];
-    if (this.oficio?.archivo) {
-      this.oficioFile = {
-        name: this.oficio.nombre_original_pdf
-      } as File;
-    }
-  }
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private route: ActivatedRoute,
+    private docService: DocService
+  ) { }
 
-  ngOnInit() {
-    this.inicializarFormulario();
-    this.fechaHoy = this.formatearFecha(new Date());
-    this.cargarTiposDocumento();
-    this.cargar_oficios_existentes();
-    this.subscribirCambiosFormulario();
+  ngOnInit(): void {
 
-    if (this.oficio) {
-      this.documentoForm.patchValue({
-        oficio: {
-        numero: this.oficio.numero || '',
-        cantidad_resoluciones: this.oficio.cantidad_resoluciones || 1
-      }
-    });
-
-    // Agregar resoluciones automáticamente desde la API
-    this.cargarDatosOficio(this.oficio);
-      }
-  }
-
-  inicializarFormulario() {
-    this.documentoForm = this.fb.group({
+    this.oficioForm = this.fb.group({
       oficio: this.fb.group({
         numero: ['', Validators.required],
-        cantidad_resoluciones: [null, [Validators.required, Validators.min(1)]]
+        fecha_doc: ['', Validators.required],
       }),
-      resoluciones: this.fb.array([])
+      resoluciones: this.fb.array([]),
     });
-    if (this.oficio?.archivo) {
-      this.oficioFile = {
-        name: this.oficio.nombre_original_pdf
-      } as File; // Mock del archivo solo para mostrar nombre
+    this.cargarTiposDocumento();
+
+    this.fechaHoy = this.formatearFecha(new Date());
+
+    this.agregarResolucion();
+
+    const data = history.state.oficio;
+    if (data) {
+    // solo accede si existe
+      this.documentosRelacionados = data.documentos || [];
     }
-  }
-
-  get oficioForm() { return this.documentoForm.get('oficio') as FormGroup; }
-  get resoluciones() { return this.documentoForm.get('resoluciones') as FormArray; }
-
-  cargarDatosOficio(ofi: any) {
-    this.oficioForm.patchValue({
-      numero: ofi.numero,
-      cantidad_resoluciones: ofi.resoluciones.length
+    this.route.queryParams.subscribe(params => {
+      this.id = +params['id'];
+      if (this.id) {
+        this.cargarOficio(this.id);
+      } else {
+        this.router.navigate(['/apps/editar-documento']);
+      }
     });
-    this.resolucionFiles = new Array(ofi.resoluciones.length).fill(null);
-    this.resoluciones.clear();
 
-    ofi.resoluciones.forEach((r: any, i: number) => {
-      const rg = this.fb.group({
-        clase_documento_id: [r.clase_documento_id, Validators.required],
-        nombre: [r.nombre, Validators.required],
-        numero: [r.numero, Validators.required],
-        fecha: [r.fecha, Validators.required],
-        resumen: [r.resumen],
-        detalle: [r.detalle],
-        archivo: [null]
-      });
-      this.resoluciones.push(rg);
-    });
-    this.activeTab = 0;
-  }
+    // this.oficioForm = this.fb.group({
+    //   numero: [data.numero],
+    // });
 
-  subscribirCambiosFormulario() {
-    this.oficioForm.get('numero')?.valueChanges.subscribe(v => this.buscarOficiosCoincidencias(v));
+    // Asignamos los documentos relacionados
+
+
+    // this.documentosRelacionados = data.documentos || [];
   }
 
   formatearFecha(fecha: Date): string {
-    const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-    return `${fecha.getDate()} de ${meses[fecha.getMonth()]} ${fecha.getFullYear()}`;
-  }
-
-  cargarTiposDocumento() {
-    this.docService.getTipoDoc().subscribe({
-      next: res => this.tiposDocumento = res.documentos,
-      error: () => alert('Error al cargar tipos de documento')
-    });
-  }
-
-  cargar_oficios_existentes() {
-    this.docService.getOficios().subscribe({
-      next: res => this.oficios_existentes = res.documentos,
-      error: err => console.error(err)
-    });
-  }
-
-  buscarOficiosCoincidencias(val: string) {
-    this.numeroExistenteMensajeOficio = '';
-    const num = val?.replace(/^0+/,'');
-    if (!num) return;
-    const coinc = this.oficios_existentes.filter(d => d.codigo?.split('-')[0]?.replace(/^0+/,'') === num);
-    if (coinc.length) {
-      const txt = coinc.map(c => c.codigo).join(', ');
-      this.numeroExistenteMensajeOficio = `Ya existe un oficio con el número ${num} (${txt})`;
-    }
-  }
-
-  agregarResolucionesSegunCantidad() {
-    const cant = this.oficioForm.get('cantidad_resoluciones')?.value;
-    if (!cant || cant < 1) return alert('Ingresa un número válido');
-    this.resoluciones.clear();
-    this.resolucionFiles = [];
-    for (let i = 0; i < cant; i++) {
-      this.resoluciones.push(this.fb.group({
-        clase_documento_id: ['', Validators.required],
-        nombre: ['', Validators.required],
-        numero: ['', Validators.required],
-        fecha: ['', Validators.required],
-        resumen: [''],
-        detalle: [''],
-        archivo: [null]
-      }));
-      this.resolucionFiles.push(null!);
-    }
-    this.activeTab = 0;
-  }
-
-  eliminarResolucion(i: number) {
-    this.resoluciones.removeAt(i);
-    this.resolucionFiles.splice(i, 1);
-    this.activeTab = 0;
+    const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+    const dia = fecha.getDate();
+    const mes = meses[fecha.getMonth()];
+    const anio = fecha.getFullYear();
+    return `${dia} de ${mes} ${anio}`;
   }
 
   onFileChange(e: Event) {
@@ -161,36 +89,210 @@ export class EditarOficioComponent implements OnInit {
     if (f?.length) this.oficioFile = f[0];
   }
 
-  onResolucionFileChange(e: Event, i: number) {
-    const f = (e.target as HTMLInputElement).files;
-    if (f?.length) this.resolucionFiles[i] = f[0];
+  guardarCambios() {
+    if (this.oficioForm.invalid) return alert('Completa los campos obligatorios');
+    const data = this.oficioForm.value;
+    console.log('Guardar oficio actualizado:', data, 'Archivo:', this.oficioFile);
   }
 
-  get resolucionesFormGroups(): FormGroup[] {
-    return this.resoluciones.controls as FormGroup[];
+  get numeroOficio(): string {
+    return this.oficioForm?.get('numero')?.value || '';
+  }
+
+  cargarTiposDocumento() {
+    this.docService.getTipoDoc().subscribe({
+      next: (res) => {
+        console.log('Respuesta de API:', res);
+        this.tiposDocumento = res.documentos;
+      },
+      error: (err) => {
+        console.error('Error cargando tipos de documento', err);
+        alert('Error al cargar tipos de documento');
+      }
+    });
+  }
+
+  cargarOficio(id: number) {
+    this.docService.getDocumentosPorOficio(id).subscribe({
+      next: (res: any) => {
+        const data = res?.oficio;
+
+        if (!data) {
+          console.error('No se encontró data.oficio en la respuesta:', res);
+          return;
+        }
+
+        // Solo actualiza los valores del formulario sin reemplazarlo completamente
+        this.oficioForm.patchValue({
+          oficio: {
+            numero: data.numero,
+            fecha_doc: data.fecha_doc
+          }
+        });
+
+        this.documentosRelacionados = data.documentos || [];
+
+        // Si quieres agregar resoluciones desde backend, hazlo aquí (si existen)
+        if (data.resoluciones && Array.isArray(data.resoluciones)) {
+          this.resoluciones.clear(); // limpiar si ya había alguna
+
+          data.resoluciones.forEach((resol: any, index: number) => {
+            const grupo = this.fb.group({
+              clase_documento_id: [resol.clase_documento_id, Validators.required],
+              nombre: [resol.nombre, Validators.required],
+              numero: [resol.numero, Validators.required],
+              fecha: [resol.fecha, Validators.required],
+              resumen: [resol.resumen || ''],
+              detalle: [resol.detalle || ''],
+            });
+
+            this.resoluciones.push(grupo);
+            this.resolucionFiles.push(null!); // agrega espacio para archivo si deseas
+          });
+        }
+      },
+      error: (err) => {
+        console.error('Error al cargar oficio', err);
+        this.router.navigate(['/apps/editar-documento']);
+      }
+    });
+  }
+
+  regresar() {
+    this.router.navigate(['/apps/editar-documento']);
+  }
+
+  get resoluciones(): FormArray<FormGroup> {
+    return this.oficioForm.get('resoluciones') as FormArray<FormGroup>;
+
+  }
+
+  filtrar_documentos_existentes(id: any) {
+    this.docService.getResolucionesPorOficina(id).subscribe({
+      next: (res) => {
+        this.documentos_existentes = res.documentos;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
+  }
+
+  agregarResolucion(): void {
+    const resolucionForm = this.fb.group({
+      clase_documento_id: ['', Validators.required],
+      nombre: ['', Validators.required],
+      numero: ['', Validators.required],
+      fecha: ['', Validators.required],
+      resumen: [''],
+      detalle: [''],
+    });
+
+    // Añadimos la nueva resolución
+    this.resoluciones.push(resolucionForm);
+    this.resolucionFiles.push(null!);
+    this.activeTab = this.resoluciones.length - 1;
+
+    // Ahora suscribimos el cambio en el campo 'numero' de esta nueva resolución
+    resolucionForm.get('numero')?.valueChanges.subscribe(valor => {
+  if (valor) {  // Comprobamos si 'valor' no es null o undefined
+    this.buscarCoincidencias(valor, `resolucion-${this.resoluciones.length - 1}`);
+  }
+});
+
+    // Suscribimos también a cambios en 'clase_documento_id' si es necesario
+    resolucionForm.get('clase_documento_id')?.valueChanges.subscribe(valor => {
+      this.filtrar_documentos_existentes(valor);
+    });
+  }
+
+  eliminarResolucion(index: number): void {
+    this.resoluciones.removeAt(index);
+    this.resolucionFiles.splice(index, 1);
+    this.activeTab = 0;
+  }
+
+  buscarCoincidencias(valor: string, tipo: string) {
+    if (!valor) {
+      this.numeroExistenteMensaje = '';
+      return;
+    }
+
+    const numeroIngresado = valor.replace(/^0+/, '');
+
+    const coincidencias = this.documentos_existentes.filter(doc => {
+      const numeroDoc = doc.num_anio?.split('-')[0]?.replace(/^0+/, '');
+      return numeroDoc === numeroIngresado;
+    });
+
+    if (coincidencias.length > 0) {
+      const coincidenciasTexto = coincidencias.map(c => c.num_anio).join(', ');
+      this.numeroExistenteMensaje = `Ya existe un oficio con el número ${numeroIngresado} (${coincidenciasTexto})`;
+    } else {
+      this.numeroExistenteMensaje = '';
+    }
+  }
+
+  onResolucionFileChange(event: Event, index: number): void {
+    const fileInput = event.target as HTMLInputElement;
+    if (fileInput.files?.length) {
+      this.resolucionFiles[index] = fileInput.files[0];
+    }
   }
 
   prueba_imprimir() {
-    if (this.documentoForm.invalid) return alert('Completa campos obligatorios');
-    const fd = new FormData();
-    const ofi = this.oficioForm.value;
-    fd.append('numero_oficio', ofi.numero);
-    fd.append('cantidad_resoluciones', ofi.cantidad_resoluciones);
-    if (this.oficioFile) fd.append('pdf_oficio', this.oficioFile);
+    const formData = new FormData();
 
-    this.resoluciones.controls.forEach((res, i) => {
-      const d = res.value;
-      fd.append(`documento_${i}`, JSON.stringify(d));
-      if (this.resolucionFiles[i]) fd.append(`pdf_documento_${i}`, this.resolucionFiles[i]!);
+    // Datos del oficio
+    const oficioData = this.oficioForm.value;
+    formData.append('numero_oficio', oficioData.numero);
+    formData.append('fecha_ofi', oficioData.fecha_doc);
+    if (this.oficioFile) {
+      formData.append('pdf_oficio', this.oficioFile);
+    }
+
+    // Datos de resoluciones (documentos)
+    this.resoluciones.controls.forEach((res, index) => {
+      const documentoData = res.value;
+      const documentoJSON = {
+        clase_documento_id: documentoData.clase_documento_id,
+        nombre: documentoData.nombre,
+        numero: documentoData.numero,
+        fecha: documentoData.fecha,
+        resumen: documentoData.resumen || '',
+        detalle: documentoData.detalle || '',
+      };
+
+      // Asegúrate de que el archivo se adjunte correctamente
+      if (this.resolucionFiles[index]) {
+        formData.append(`pdf_documento_${index}`, this.resolucionFiles[index]);
+      }
+
+      // Convertir el objeto del documento a un string y agregar al FormData
+      formData.append(`pdf_documento_${index}`, JSON.stringify(documentoJSON));
     });
 
-    this.docService.cargar_documentos(fd).subscribe({
-      next: res => { console.log('OK', res); this.pasoActual = 2; },
-      error: err => console.error('Error', err)
+    // Verificar el contenido de FormData en consola
+    formData.forEach((value, key) => {
+      //console.log(${key}:, value);
+    });
+
+    // Enviar al backend
+    this.docService.cargar_documentos(formData).subscribe({
+      next: res => {
+        console.log(res);
+        console.log("Subido correctamente");
+      },
+      error: err => {
+        console.error('ERROR COMPLETO:', err);
+        console.log('Código de error HTTP:', err.status);
+        console.log("Error al subir");
+      }
     });
   }
+  
 
-  Regresar() {
-    this.router.navigate(['/apps/editar-documento']);
-  }
+  
+
 }
+

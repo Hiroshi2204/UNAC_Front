@@ -68,13 +68,17 @@ getOficios1(): Observable<any> {
   return this.http.get<any>(`${environment.apiUrl}/api/oficios/get`);
 }
 
-// getOficiosid(id:any): Observable<any> { 
+// getDocumentosPorOficio(id:any): Observable<any> {
 //     return this.http.post<any>(`${environment.apiUrl}/api/oficios/get_id`, {id});
 
   //}
-  getOficiosid(): Observable<any> {
-  return this.http.get<any>(`${environment.apiUrl}/api/oficios/get_id`);
-}
+  getDocumentosPorOficio1(id: number): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/oficios/get_id?id=${id}`);
+  }
+  getDocumentosPorOficio(id: number): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/api/oficios/get_id?id=${id}`);
+  }
+
 
 
 

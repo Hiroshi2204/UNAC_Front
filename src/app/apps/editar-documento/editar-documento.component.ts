@@ -46,7 +46,7 @@ export class EditarDocumentoComponent implements OnInit {
       }
     });
   }
-  abrirOficio(oficio: any) {
-    this.router.navigate(['/apps/editar-oficio'], { state: { oficio } });
+  abrirOficio(id: number) {
+    this.router.navigate(['/apps/editar-oficio'], { queryParams: { id } });
   }
 }
