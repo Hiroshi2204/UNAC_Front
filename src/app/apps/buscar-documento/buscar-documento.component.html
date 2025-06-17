@@ -1,7 +1,5 @@
-<div style="padding-top: 15px;">
-
-
-</div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<div style="padding-top: 15px"></div>
 <section class="main-content">
   <div class="section-body">
     <div class="row">
@@ -11,66 +9,94 @@
             <h4>Buscar Documento</h4>
           </div>
           <div class="card-body">
-
             <div class="row align-items-end mb-3">
               <div class="col-md-4">
                 <label for="nombre">Nombre del documento</label>
-                <input [(ngModel)]="filtros.nombre" name="nombre" type="text" class="form-control"
-                  placeholder="Nombre del documento" />
+                <input
+                  [(ngModel)]="filtros.nombre"
+                  name="nombre"
+                  type="text"
+                  class="form-control"
+                  placeholder="Nombre del documento"
+                />
               </div>
 
               <div class="col-md-2">
                 <label for="num_documento">Nro documento</label>
-                <input [(ngModel)]="filtros.num_documento" name="num_documento" type="text" class="form-control"
-                  placeholder="Número" />
+                <input
+                  [(ngModel)]="filtros.num_documento"
+                  name="num_documento"
+                  type="text"
+                  class="form-control"
+                  placeholder="Número"
+                />
               </div>
 
               <div class="col-md-2">
                 <label for="fecha">Fecha de emisión</label>
-                <input [(ngModel)]="filtros.fecha" name="fecha" type="date" class="form-control" />
+                <input
+                  [(ngModel)]="filtros.fecha"
+                  name="fecha"
+                  type="date"
+                  class="form-control"
+                />
               </div>
 
               <div class="col-md-4">
                 <label for="asunto">Resumen</label>
-                <input [(ngModel)]="filtros.resumen" name="resumen" type="text" class="form-control"
-                  placeholder="Resumen" />
+                <input
+                  [(ngModel)]="filtros.resumen"
+                  name="resumen"
+                  type="text"
+                  class="form-control"
+                  placeholder="Resumen"
+                />
               </div>
             </div>
 
             <div class="row align-items-end mb-3">
               <div class="col-md-6">
                 <label for="detalle">Detalle</label>
-                <input [(ngModel)]="filtros.detalle" name="detalle" type="text" class="form-control"
-                  placeholder="Detalle" />
+                <input
+                  [(ngModel)]="filtros.detalle"
+                  name="detalle"
+                  type="text"
+                  class="form-control"
+                  placeholder="Detalle"
+                />
               </div>
 
               <div class="col-md-6">
                 <label for="oficina_remitente">Oficina remitente</label>
-                
-                  <select [(ngModel)]="filtros.oficina_remitente" class="form-select form-control">
+
+                <select
+                  [(ngModel)]="filtros.oficina_remitente"
+                  class="form-select form-control"
+                >
                   <option value="">Seleccione una opción</option>
-                  <option *ngFor="let tipo of oficinas" [ngValue]="tipo.id">{{ tipo.nombre }}</option>
-                  
+                  <option *ngFor="let tipo of oficinas" [ngValue]="tipo.id">
+                    {{ tipo.nombre }}
+                  </option>
                 </select>
               </div>
 
-
-
               <div class="col-md-2 mt-3">
                 <button class="btn btn-primary" (click)="buscarDocumento(1)">
-                  Buscar
+                  Buscar <i class="bi bi-search ms-2"></i>
                 </button>
-                
               </div>
-
-              
-              
             </div>
 
-
-            <div *ngIf="loadingIndicator" class="d-flex justify-content-center align-items-center"
-              style="height: 200px;">
-              <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+            <div
+              *ngIf="loadingIndicator"
+              class="d-flex justify-content-center align-items-center"
+              style="height: 200px"
+            >
+              <div
+                class="spinner-border text-primary"
+                role="status"
+                style="width: 3rem; height: 3rem"
+              >
                 <span class="visually-hidden">Cargando...</span>
               </div>
             </div>
@@ -83,13 +109,21 @@
 
             <div *ngIf="dataLoaded; else initialMessage">
               <div *ngIf="rows.length > 0; else noDataTemplate">
-
-
-
-                <ngx-datatable #table class="bootstrap" [rows]="rows" [columns]="[]" [columnMode]="'force'"
-                  [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [scrollbarH]="scrollBarHorizontal"
-                  [count]="totalItems" [limit]="itemsPorPagina" [offset]="paginaActual - 1"
-                  (page)="onPageChange($event)">
+                <ngx-datatable
+                  #table
+                  class="bootstrap"
+                  [rows]="rows"
+                  [columns]="[]"
+                  [columnMode]="'force'"
+                  [headerHeight]="50"
+                  [footerHeight]="50"
+                  [rowHeight]="'auto'"
+                  [scrollbarH]="scrollBarHorizontal"
+                  [count]="totalItems"
+                  [limit]="itemsPorPagina"
+                  [offset]="paginaActual - 1"
+                  (page)="onPageChange($event)"
+                >
                   <ngx-datatable-column name="Nombre del documento">
                     <ng-template let-row="row" ngx-datatable-cell-template>
                       {{ row.nombre }}
@@ -98,7 +132,7 @@
 
                   <ngx-datatable-column name="Número documento">
                     <ng-template let-row="row" ngx-datatable-cell-template>
-                      {{ row.num_anio}}
+                      {{ row.num_anio }}
                     </ng-template>
                   </ngx-datatable-column>
 
@@ -110,17 +144,28 @@
 
                   <ngx-datatable-column name="Archivo PDF">
                     <ng-template let-row="row" ngx-datatable-cell-template>
-                      {{ row.nombre_original_pdf || 'No disponible' }}
+                      {{ row.nombre_original_pdf || "No disponible" }}
                     </ng-template>
                   </ngx-datatable-column>
 
-                  <ngx-datatable-column name="Acciones" [sortable]="false" [canAutoResize]="false" [width]="150">
+                  <ngx-datatable-column
+                    name="Acciones"
+                    [sortable]="false"
+                    [canAutoResize]="false"
+                    [width]="150"
+                  >
                     <ng-template let-row="row" ngx-datatable-cell-template>
-                      <button class="btn btn-sm btn-primary me-1"
-                        (click)="descargarDoc(row.id, row.nombre_original_pdf)">
+                      <button
+                        class="btn btn-sm btn-primary me-1"
+                        (click)="descargarDoc(row.id, row.nombre_original_pdf)"
+                      >
                         <i class="fa fa-download"></i>
                       </button>
-                      <button *ngIf="usuario_admin" class="btn btn-sm btn-danger" (click)="eliminarDocumento(row.id)">
+                      <button
+                        *ngIf="usuario_admin"
+                        class="btn btn-sm btn-danger"
+                        (click)="eliminarDocumento(row.id)"
+                      >
                         <i class="fa fa-trash"></i>
                       </button>
                     </ng-template>
@@ -130,35 +175,55 @@
                 <nav *ngIf="total_paginas > 1" aria-label="Page navigation">
                   <ul class="pagination justify-content-center mt-3">
                     <li class="page-item" [class.disabled]="paginaActual === 1">
-                      <button class="page-link" (click)="buscarDocumento(paginaActual - 1)">
-                        < </button>
+                      <button
+                        class="page-link"
+                        (click)="buscarDocumento(paginaActual - 1)"
+                      >
+                        <
+                      </button>
                     </li>
 
-                    <li class="page-item" *ngFor="let page of [].constructor(total_paginas); let i = index"
-                      [class.active]="paginaActual === i + 1">
-                      <button class="page-link" (click)="buscarDocumento(i + 1)">{{ i + 1 }}</button>
+                    <li
+                      class="page-item"
+                      *ngFor="
+                        let page of [].constructor(total_paginas);
+                        let i = index
+                      "
+                      [class.active]="paginaActual === i + 1"
+                    >
+                      <button
+                        class="page-link"
+                        (click)="buscarDocumento(i + 1)"
+                      >
+                        {{ i + 1 }}
+                      </button>
                     </li>
 
-                    <li class="page-item" [class.disabled]="paginaActual === total_paginas">
-                      <button class="page-link" (click)="buscarDocumento(paginaActual + 1)">></button>
+                    <li
+                      class="page-item"
+                      [class.disabled]="paginaActual === total_paginas"
+                    >
+                      <button
+                        class="page-link"
+                        (click)="buscarDocumento(paginaActual + 1)"
+                      >
+                        >
+                      </button>
                     </li>
                   </ul>
                 </nav>
-
               </div>
             </div>
 
             <ng-template #initialMessage>
-              <p>Por favor ingrese un término de búsqueda y haga clic en Buscar.</p>
+              <p>
+                Por favor ingrese un término de búsqueda y haga clic en Buscar.
+              </p>
             </ng-template>
 
             <ng-template #noDataTemplate>
               <p>No se encontraron coincidencias".</p>
             </ng-template>
-
-
-
-
           </div>
         </div>
       </div>

@@ -44,6 +44,7 @@
     "angular-gauge": "^5.0.0",
     "apexcharts": "^4.1.0",
     "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.13.1",
     "browser-sync": "^3.0.3",
     "chart.js": "^4.4.7",
     "core-js": "^3.39.0",

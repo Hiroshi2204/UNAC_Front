@@ -20,6 +20,7 @@ export class SigninComponent implements OnInit {
   returnUrl!: string;
   error = '';
   hide = true;
+  loading = false;
   constructor(
     private formBuilder: UntypedFormBuilder,
     private router: Router,
@@ -50,19 +51,21 @@ export class SigninComponent implements OnInit {
         .login(this.f['username'].value, this.f['password'].value)
         .subscribe(
           (res) => {
+            this.loading = false;
             if (res) {
-              this.router.navigate(['/apps/subir-documento']); 
+              this.router.navigate(['/apps/cargar-documento']);
             } else {
               this.error = 'Usuario o Contraseña Inválida';
             }
             this.submitted = false;
           },
           (error) => {
+            this.loading = false;
             this.error = "Usuario o Contraseña Inválida";
             this.submitted = false;
           }
         );
     }
-    loading = false;
+    
 }
 
