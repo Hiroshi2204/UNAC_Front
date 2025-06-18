@@ -36,6 +36,9 @@ export class PublicadosComponent {
   cargarOficios() {
     this.docService.getOficiospublicados().subscribe({
       next: (res) => {
+        const oficiosOrdenados = res.oficios.sort((a: any, b: any) =>
+          new Date(b.fecha_envio).getTime() - new Date(a.fecha_envio).getTime()
+        );
         // Ajusta según la estructura que regresa tu API
         this.todosLosOficios = [...res.oficios];
         this.oficios = res.oficios;
@@ -53,20 +56,51 @@ export class PublicadosComponent {
     this.router.navigate(['/apps/editar-oficio'], { queryParams: { id } });
   }
 
+  // filtrarOficios() {
+  //   const termino = this.filtroBusqueda.toLowerCase().trim();
+  //   this.oficios = this.todosLosOficios.filter((oficio) => {
+  //     const numero = oficio?.numero?.toLowerCase() || '';
+  //     const codigo = oficio?.codigo?.toLowerCase() || '';
+  //     const pdf = oficio?.nombre_original_pdf?.toLowerCase() || '';
+  //     const estado = oficio.estado_publicacion ? 'publicado' : 'no publicado';
+  //     return (
+  //       numero.includes(termino) ||
+  //       codigo.includes(termino) ||
+  //       pdf.includes(termino) ||
+  //       estado.includes(termino)
+  //     );
+  //   });
+  // }
   filtrarOficios() {
     const termino = this.filtroBusqueda.toLowerCase().trim();
-    this.oficios = this.todosLosOficios.filter((oficio) => {
+
+    // Asegúrate de que todosLosOficios esté definido y sea un array
+    if (!this.todosLosOficios || !Array.isArray(this.todosLosOficios)) {
+      this.oficios = [];
+      return;
+    }
+
+    // Filtrado
+    const oficiosFiltrados = this.todosLosOficios.filter((oficio) => {
       const numero = oficio?.numero?.toLowerCase() || '';
       const codigo = oficio?.codigo?.toLowerCase() || '';
+      const fecha_envio = oficio?.fecha_envio?.toLowerCase() || '';
       const pdf = oficio?.nombre_original_pdf?.toLowerCase() || '';
       const estado = oficio.estado_publicacion ? 'publicado' : 'no publicado';
+
       return (
         numero.includes(termino) ||
         codigo.includes(termino) ||
+        fecha_envio.includes(termino) ||
         pdf.includes(termino) ||
         estado.includes(termino)
       );
     });
+
+    // Ordenar por fecha_envio descendente
+    this.oficios = oficiosFiltrados.sort((a: any, b: any) =>
+      new Date(b.fecha_envio || 0).getTime() - new Date(a.fecha_envio || 0).getTime()
+    );
   }
 
   despublicarOficio(id: number) {

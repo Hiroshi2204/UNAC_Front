@@ -50,12 +50,14 @@
                 <thead class="text-center">
                   <tr>
                     <th class="text-center">
-                      <input
-                        type="checkbox"
-                        [(ngModel)]="todosSeleccionados"
-                        (change)="seleccionarTodos(todosSeleccionados)"
-                        style="width: 18px; height: 18px;"
-                      />
+                      <label class="checkbox-rounded m-0 d-inline-block">
+                        <input
+                          type="checkbox"
+                          [(ngModel)]="todosSeleccionados"
+                          (change)="seleccionarTodos(todosSeleccionados)"
+                        />
+                        <span></span>
+                      </label>
                     </th>
                     <th>Numero</th>
                     <th>Código</th>
@@ -66,11 +68,14 @@
                 <tbody>
                   <tr *ngFor="let oficio of oficios; let i = index">
                     <td class="text-center">
-                      <input
-                        type="checkbox"
-                        [(ngModel)]="seleccionados[i]"
-                        (change)="actualizarSeleccionGeneral()"
-                      />
+                      <label class="checkbox-rounded m-0 d-inline-block">
+                        <input
+                          type="checkbox"
+                          [(ngModel)]="seleccionados[i]"
+                          (change)="actualizarSeleccionGeneral()"
+                        />
+                        <span></span>
+                      </label>
                     </td>
                     <td>{{ oficio.numero }}</td>
                     <td>{{ oficio.codigo }}</td>
