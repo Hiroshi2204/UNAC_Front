@@ -7,6 +7,8 @@ import { BuscarDocumentoComponent } from "./buscar-documento/buscar-documento.co
 import { DocumentoComponent } from "./documento/documento.component";
 import { EditarDocumentoComponent } from "./editar-documento/editar-documento.component";
 import { EditarOficioComponent } from "./editar-oficio/editar-oficio.component";
+import { PendientesComponent } from "./publicar/pendientes/pendientes.component";
+import { PublicadosComponent } from "./publicar/publicados/publicados.component";
 
 export const APPS_ROUTE: Route[] = [
   {
@@ -40,6 +42,24 @@ export const APPS_ROUTE: Route[] = [
   {
     path: 'editar-oficio',
     component: EditarOficioComponent,
+  },
+  {
+    path: 'publicar',
+    children: [
+      {
+        path: 'pendientes',
+        component: PendientesComponent
+      },
+      {
+        path: 'publicados',
+        component: PublicadosComponent
+      },
+      {
+        path: '',
+        redirectTo: 'pendientes',
+        pathMatch: 'full'
+      }
+    ]
   }
 
 

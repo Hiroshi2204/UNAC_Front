@@ -6,23 +6,22 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { Modal1Component } from 'app/modal1/modal1.component';
-import { EditarOficioComponent } from '../editar-oficio/editar-oficio.component';
 import { Router, RouterLink } from '@angular/router';
 
-
 @Component({
-  selector: 'app-editar-documento',
-  imports: [NgxDatatableModule, FormsModule, CommonModule, MatDialogModule, RouterLink],
-  templateUrl: './editar-documento.component.html',
-  styleUrl: './editar-documento.component.scss'
+  selector: 'app-publicados',
+  imports: [NgxDatatableModule, FormsModule, CommonModule, MatDialogModule],
+  templateUrl: './publicados.component.html',
+  styleUrl: './publicados.component.scss'
 })
-export class EditarDocumentoComponent implements OnInit {
+export class PublicadosComponent {
   dataLoaded: boolean = false;
   oficios: any[] = [];
   loadingIndicator = true;
   reorderable = true;
   filtroBusqueda: string = '';
   todosLosOficios: any[] = [];
+
 
   constructor(private docService: DocService, private dialog: MatDialog, private router: Router) { }
 

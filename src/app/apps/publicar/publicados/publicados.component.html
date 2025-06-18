@@ -4,8 +4,10 @@
     <div class="row">
       <div class="col-12">
         <div class="card">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <h4>Editar Oficio</h4>
+          <div
+            class="card-header d-flex justify-content-between align-items-center"
+          >
+            <h4>Publicacion</h4>
             <div class="input-group" style="max-width: 600px">
               <input
                 type="text"
@@ -50,14 +52,18 @@
                   <tr *ngFor="let oficio of oficios">
                     <td>{{ oficio.numero }}</td>
                     <td>{{ oficio.codigo }}</td>
-                    <td class="text-center">{{ oficio.fecha_envio | date: 'dd/MM/yyyy' }}</td>
+                    <td class="text-center">
+                      {{ oficio.fecha_envio | date : "dd/MM/yyyy" }}
+                    </td>
                     <td>{{ oficio.nombre_original_pdf }}</td>
                     <td class="text-center">
                       {{
                         oficio.estado_publicacion ? "Publicado" : "No Publicado"
                       }}
                     </td>
-                    <td class="text-center">{{ oficio.fecha_publicacion | date: 'dd/MM/yyyy' }}</td>
+                    <td class="text-center">
+                      {{ oficio.fecha_publicacion | date : "dd/MM/yyyy" }}
+                    </td>
                     <th class="text-center">
                       <button
                         mat-raised-button

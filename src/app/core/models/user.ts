@@ -3,6 +3,8 @@ export class User {
   oficina_id!: number;
   username!: string;
   oficina!: string;
+  rol: any;
+  rol_id: any;
   
   
 }

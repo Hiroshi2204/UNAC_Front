@@ -52,7 +52,8 @@ export class SigninComponent implements OnInit {
         .subscribe(
           (res) => {
             this.loading = false;
-            if (res) {
+            if (res && res.token) {
+              localStorage.setItem('user', JSON.stringify(res));
               this.router.navigate(['/apps/cargar-documento']);
             } else {
               this.error = 'Usuario o Contraseña Inválida';

@@ -55,6 +55,37 @@
       "badge": "",
       "badgeClass": "",
       "submenu": []
+    },
+    {
+      "path": "",
+      "title": "MENUITEMS.PUBLICAR.TEXT",
+      "iconType": "feather",
+      "icon": "upload-cloud",
+      "class": "",
+      "groupTitle": false,
+      "badge": "",
+      "badgeClass": "",
+      "rol": [1],
+      "submenu": [
+        {
+          "path": "/apps/publicar/pendientes",
+          "title": "Pendientes",
+          "iconType": "",
+          "icon": "",
+          "class": "",
+          "groupTitle": false,
+          "submenu": []
+        },
+        {
+          "path": "/apps/publicar/publicados",
+          "title": "Publicados",
+          "iconType": "",
+          "icon": "",
+          "class": "",
+          "groupTitle": false,
+          "submenu": []
+        }
+      ]
     }
     
     

@@ -26,6 +26,9 @@
     "EDITAR DOCUMENTO" : {
       "TEXT": "Editar Oficio"
     },
+    "PUBLICAR" : {
+      "TEXT": "Publicar"
+    },
     
     "HOME": {
       "TEXT": "Casa",

@@ -29,12 +29,14 @@
               <div class="header">{{sidebarItem.title | translate}}</div>
             }
             @if (!sidebarItem.groupTitle;) {
-              <a [routerLink]="sidebarItem.class === '' ? [sidebarItem.path] : null"
-                [ngClass]="[sidebarItem.class]" (click)="callToggleMenu($event, sidebarItem.submenu.length)"
-                class="menu-top">
+              <a [routerLink]="sidebarItem.submenu.length === 0 ? [sidebarItem.path] : null"
+                  [ngClass]="[sidebarItem.class]"
+                  (click)="callToggleMenu($event, sidebarItem.submenu.length)"
+                  class="menu-top">
                 <i-feather [name]="sidebarItem.icon" class="sidebarIcon"></i-feather>
                 <span class="hide-menu">{{sidebarItem.title | translate}}
                 </span>
+                <i *ngIf="sidebarItem.submenu.length > 0" class="feather icon-chevron-down ml-auto"></i>
                 @if (sidebarItem.badge !== '' ) {
                   <span [ngClass]="[sidebarItem.badgeClass]">{{sidebarItem.badge}}</span>
                 }
