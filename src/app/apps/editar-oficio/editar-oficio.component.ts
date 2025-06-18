@@ -30,6 +30,7 @@ export class EditarOficioComponent implements OnInit {
   tiposDocumento: any[] = [];
   nombreArchivo: string = '';
   nombreOficio: string = '';
+  guardando: boolean = false;
 
 
 
@@ -156,6 +157,8 @@ export class EditarOficioComponent implements OnInit {
       return;
     }
 
+    this.guardando = true;
+
     const formData = new FormData();
     const datosFormulario = this.oficioForm.value;
 
@@ -172,29 +175,6 @@ export class EditarOficioComponent implements OnInit {
       const v = resolucion.value;
       return v.clase_documento_id && v.nombre && v.numero;
     });
-
-    // Documentos relacionados (resoluciones)
-    // this.resoluciones.controls.forEach((resolucion, index) => {
-    //   const valor = resolucion.value;
-
-    //   const datosResolucion = {
-    //     id: valor.id || null,
-    //     clase_documento_id: valor.clase_documento_id,
-    //     nombre: valor.nombre,
-    //     numero: valor.numero,
-    //     fecha: valor.fecha,
-    //     resumen: valor.resumen,
-    //     detalle: valor.detalle
-    //   };
-
-    //   // Agregar datos JSON de la resolución
-    //   formData.append(`datos_documento_${index}`, JSON.stringify(datosResolucion));
-
-    //   // Agregar archivo si existe
-    //   if (this.resolucionFiles[index]) {
-    //     formData.append(`archivo_documento_${index}`, this.resolucionFiles[index]);
-    //   }
-    // });
     resolucionesValidas.forEach((resolucion, index) => {
       const valor = resolucion.value;
 
@@ -217,11 +197,13 @@ export class EditarOficioComponent implements OnInit {
 
     this.docService.actualizar_documentos(formData).subscribe({
       next: (res) => {
+        this.guardando = false;
         alert('Oficio actualizado correctamente');
         this.router.navigate(['/apps/editar-documento']);
       },
       error: (err) => {
         console.error('Error al actualizar el oficio', err);
+        this.guardando = false;
         alert('Error al actualizar el oficio');
       }
     });
@@ -300,7 +282,7 @@ export class EditarOficioComponent implements OnInit {
         const oficio = res.oficio;
 
         // Cargar datos del oficio
-        this.oficioForm.patchValue({
+        this.oficioForm.get('oficio')?.patchValue({
           numero: oficio.numero,
         });
 

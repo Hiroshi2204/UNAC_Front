@@ -21,6 +21,8 @@ export class PendientesComponent {
   reorderable = true;
   filtroBusqueda: string = '';
   todosLosOficios: any[] = [];
+  seleccionados: boolean[] = [];
+  todosSeleccionados: boolean = false;
 
 
   constructor(private docService: DocService, private dialog: MatDialog, private router: Router) { }
@@ -34,7 +36,7 @@ export class PendientesComponent {
   }
 
   cargarOficios() {
-    this.docService.getOficios1().subscribe({
+    this.docService.getOficiosPendientes().subscribe({
       next: (res) => {
         // Ajusta según la estructura que regresa tu API
         this.todosLosOficios = [...res.oficios];
@@ -42,6 +44,8 @@ export class PendientesComponent {
         this.loadingIndicator = false; // ✅ Apagar loader aquí
         this.dataLoaded = true;
         //console.log(this.oficios)
+        this.seleccionados = this.oficios.map(() => false);
+        this.todosSeleccionados = false;
       },
       error: (err) => {
         console.error('Error al cargar oficios:', err);
@@ -66,6 +70,41 @@ export class PendientesComponent {
         pdf.includes(termino) ||
         estado.includes(termino)
       );
+    });
+  }
+
+  seleccionarTodos(valor: boolean) {
+    this.todosSeleccionados = valor;
+    this.seleccionados = this.oficios.map(() => valor);
+  }
+
+  actualizarSeleccionGeneral() {
+    const total = this.seleccionados.length;
+    const marcados = this.seleccionados.filter(s => s).length;
+    this.todosSeleccionados = total > 0 && marcados === total;
+  }
+
+  get haySeleccionados(): boolean {
+    return this.seleccionados.some(s => s); // true si al menos uno está en true
+  }
+
+  publicarSeleccionados() {
+    const idsSeleccionados = this.oficios
+      .map((oficio, i) => this.seleccionados[i] ? oficio.id : null)
+      .filter(id => id !== null);
+
+    if (idsSeleccionados.length === 0) return;
+
+    this.loadingIndicator = true;
+
+    this.docService.publicar({ ids: idsSeleccionados }).subscribe({
+      next: () => {
+        this.cargarOficios(); // 🔁 Refrescamos después de publicar
+      },
+      error: (err) => {
+        console.error('Error al publicar oficios:', err);
+        this.loadingIndicator = false;
+      }
     });
   }
 

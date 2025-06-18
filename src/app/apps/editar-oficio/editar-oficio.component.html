@@ -273,10 +273,10 @@
                       </button>
                     </div>
                     <hr />
-                    <div class="text-end">
+                    <div class="d-flex justify-content-end gap-2">
                       <button
                         type="button"
-                        class="btn btn-info me-2 px-3 py-2"
+                        class="btn btn-info px-3 py-2"
                         (click)="regresar()"
                       >
                         <i class="bi bi-arrow-left-circle me-1"></i> Regresar
@@ -284,10 +284,13 @@
 
                       <button
                         type="button"
-                        class="btn btn-success px-3 py-2"
+                        class="btn btn-success px-3 py-2 d-flex align-items-center"
+                        [disabled]="guardando"
                         (click)="guardarCambios()"
                       >
-                        <i class="bi bi-save me-1"></i> Guardar
+                        <span *ngIf="guardando" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        <i *ngIf="!guardando" class="bi bi-save me-1"></i>
+                        {{ guardando ? 'Guardando...' : 'Guardar' }}
                       </button>
                     </div>
                   </div>

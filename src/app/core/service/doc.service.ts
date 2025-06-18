@@ -85,6 +85,24 @@ export class DocService {
     return this.http.post(`${environment.apiUrl}/api/oficios/actualizar_oficios`, data);
   }
 
+  getOficiosPendientes(): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/api/oficios/get/pendientes`);
+  }
+
+  getOficiospublicados(): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/api/oficios/get/publicados`);
+  }
+
+  publicar1(data: { ids: number[] }) {
+    return this.http.post<any>('/api/oficios/publicar', data);
+  }
+  publicar(data: { ids: number[] }) {
+    return this.http.post<any>(`${environment.apiUrl}/api/oficios/publicar`, data);
+  }
+  despublicar(id: number) {
+    return this.http.post<any>(`${environment.apiUrl}/api/oficios/despublicar`, { id });
+  }
+
 
 
 

@@ -30,11 +30,11 @@ export class PublicadosComponent {
     this.loadingIndicator = true;
     this.dataLoaded = false;
     this.cargarOficios();
-    
+
   }
 
   cargarOficios() {
-    this.docService.getOficios1().subscribe({
+    this.docService.getOficiospublicados().subscribe({
       next: (res) => {
         // Ajusta según la estructura que regresa tu API
         this.todosLosOficios = [...res.oficios];
@@ -66,6 +66,23 @@ export class PublicadosComponent {
         pdf.includes(termino) ||
         estado.includes(termino)
       );
+    });
+  }
+
+  despublicarOficio(id: number) {
+    if (!confirm('¿Estás seguro de despublicar este oficio?')) return;
+
+    this.loadingIndicator = true;
+
+    this.docService.despublicar(id).subscribe({
+      next: (res) => {
+        console.log('Despublicado correctamente');
+        this.cargarOficios(); // Refresca la lista
+      },
+      error: (err) => {
+        console.error('Error al despublicar', err);
+        this.loadingIndicator = false;
+      }
     });
   }
 
