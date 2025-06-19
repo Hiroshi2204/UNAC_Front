@@ -28,7 +28,7 @@ export class SigninComponent implements OnInit {
   ) { }
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
-      username: ['admin@email.com'],
+      username: ['admin'],
       password: ['admin@123'],
       
     });
@@ -54,7 +54,7 @@ export class SigninComponent implements OnInit {
             this.loading = false;
             if (res && res.token) {
               localStorage.setItem('user', JSON.stringify(res));
-              this.router.navigate(['/apps/cargar-documento']);
+              this.router.navigate(['/apps/menu-principal']);
             } else {
               this.error = 'Usuario o Contraseña Inválida';
             }

@@ -9,6 +9,10 @@ import { EditarDocumentoComponent } from "./editar-documento/editar-documento.co
 import { EditarOficioComponent } from "./editar-oficio/editar-oficio.component";
 import { PendientesComponent } from "./publicar/pendientes/pendientes.component";
 import { PublicadosComponent } from "./publicar/publicados/publicados.component";
+import { MenuPrincipalComponent } from "./menu-principal/menu-principal.component";
+import { GeneralComponent } from "./reportes/general/general.component";
+import { EspecificoComponent } from "./reportes/especifico/especifico.component";
+import { ContraloriaComponent } from "./reportes/contraloria/contraloria.component";
 
 export const APPS_ROUTE: Route[] = [
   {
@@ -22,6 +26,10 @@ export const APPS_ROUTE: Route[] = [
   {
     path: 'contact-grid',
     component: ContactGridComponent,
+  },
+  {
+    path: 'menu-principal',
+    component: MenuPrincipalComponent,
   },
   {
     path: 'subir-documento',
@@ -57,6 +65,28 @@ export const APPS_ROUTE: Route[] = [
       {
         path: '',
         redirectTo: 'pendientes',
+        pathMatch: 'full'
+      }
+    ]
+  },
+  {
+    path: 'reportes',
+    children: [
+      {
+        path: 'general',
+        component: GeneralComponent
+      },
+      {
+        path: 'especificos',
+        component: EspecificoComponent
+      },
+      {
+        path: 'contraloria',
+        component: ContraloriaComponent
+      },
+      {
+        path: '',
+        redirectTo: 'general',
         pathMatch: 'full'
       }
     ]

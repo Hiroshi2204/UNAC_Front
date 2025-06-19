@@ -11,12 +11,12 @@
       "badgeClass": "",
       "submenu": []
     },
-   
+
     {
-      "path": "/apps/subir-documento",
-      "title": "MENUITEMS.SUBIR DOCUMENTO.TEXT",
+      "path": "/apps/menu-principal",
+      "title": "MENUITEMS.MENU PRINCIPAL.TEXT",
       "iconType": "feather",
-      "icon": "upload",  
+      "icon": "home",
       "class": "",
       "groupTitle": false,
       "badge": "",
@@ -79,6 +79,46 @@
         {
           "path": "/apps/publicar/publicados",
           "title": "Publicados",
+          "iconType": "",
+          "icon": "",
+          "class": "",
+          "groupTitle": false,
+          "submenu": []
+        }
+      ]
+    },
+    {
+      "path": "",
+      "title": "MENUITEMS.REPORTES.TEXT",
+      "iconType": "feather",
+      "icon": "file-text",
+      "class": "",
+      "groupTitle": false,
+      "badge": "",
+      "badgeClass": "",
+      "rol": [1],
+      "submenu": [
+        {
+          "path": "/apps/reportes/general",
+          "title": "Reporte General",
+          "iconType": "",
+          "icon": "",
+          "class": "",
+          "groupTitle": false,
+          "submenu": []
+        },
+        {
+          "path": "/apps/reportes/especificos",
+          "title": "Reporte para Oficinas",
+          "iconType": "",
+          "icon": "",
+          "class": "",
+          "groupTitle": false,
+          "submenu": []
+        },
+        {
+          "path": "/apps/reportes/contraloria",
+          "title": "Reporte para Contraloria",
           "iconType": "",
           "icon": "",
           "class": "",

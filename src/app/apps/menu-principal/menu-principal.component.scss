@@ -1,0 +1,17 @@
+body {
+  background: linear-gradient(145deg, #f00303, #f00303);
+  margin: 0;
+  padding: 0;
+}
+
+.bg-white {
+  background-color: #e3e7e7 !important;
+}
+
+.animate__animated {
+  animation-duration: 1s;
+}
+
+.min-vh-100 {
+  min-height: 100vh;
+}

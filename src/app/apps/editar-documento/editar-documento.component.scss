@@ -10,3 +10,23 @@
 .bg-danger {
   background-color: #dc3545 !important; /* rojo */
 }
+
+::ng-deep ngx-datatable .datatable-body-cell {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  white-space: normal;      /* Permite saltos de línea */
+  word-wrap: break-word;    /* Rompe palabras largas */
+  line-height: 1.4;         /* Mejora la legibilidad */
+}
+
+::ng-deep ngx-datatable .datatable-header-cell {
+  white-space: normal;
+  word-wrap: break-word;
+}
+::ng-deep .truncate-cell {
+  max-width: 200px;         /* Ancho máximo de la celda */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+}

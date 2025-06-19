@@ -12,8 +12,8 @@
       "TEXT": "--> Principal"
     },
 
-    "SUBIR DOCUMENTO" : {
-      "TEXT": "Subir Documento"
+    "MENU PRINCIPAL" : {
+      "TEXT": "Inicio"
     },
 
     "BUSCAR DOCUMENTO" : {
@@ -28,6 +28,9 @@
     },
     "PUBLICAR" : {
       "TEXT": "Publicar"
+    },
+    "REPORTES" : {
+      "TEXT": "Reportes"
     },
     
     "HOME": {

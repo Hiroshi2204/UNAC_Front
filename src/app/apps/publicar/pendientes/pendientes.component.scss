@@ -46,3 +46,20 @@
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
 }
+
+/* Alto moderado para celdas */
+.table td,
+.table th {
+  vertical-align: middle;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+/* Truncar texto largo dentro de celda */
+.truncate-cell {
+  max-width: 600px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+}

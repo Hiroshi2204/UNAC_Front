@@ -59,10 +59,10 @@
                         <span></span>
                       </label>
                     </th>
-                    <th>Numero</th>
-                    <th>Código</th>
-                    <th>Fecha del Oficio</th>
-                    <th>Archivo PDF</th>
+                    <th class="text-center">Número</th>
+                    <th class="text-center">Código</th>
+                    <th class="text-center">Fecha del Oficio</th>
+                    <th class="text-center">Archivo PDF</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -77,12 +77,19 @@
                         <span></span>
                       </label>
                     </td>
-                    <td>{{ oficio.numero }}</td>
-                    <td>{{ oficio.codigo }}</td>
+                    <td class="text-center">{{ oficio.numero }}</td>
+                    <td class="text-center">{{ oficio.codigo }}</td>
                     <td class="text-center">
                       {{ oficio.fecha_envio | date : "dd/MM/yyyy" }}
                     </td>
-                    <td>{{ oficio.nombre_original_pdf }}</td>
+                    <td class="text-center">
+                      <span
+                        class="truncate-cell"
+                        [title]="oficio.nombre_original_pdf"
+                      >
+                        {{ oficio.nombre_original_pdf }}
+                      </span>
+                    </td>
                   </tr>
                 </tbody>
               </table>

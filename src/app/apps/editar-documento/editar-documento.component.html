@@ -34,44 +34,75 @@
           </div>
           <div class="card-body">
             <div *ngIf="oficios && oficios.length > 0; else noOficios">
-              <table class="table table-bordered">
-                <thead class="text-center">
-                  <tr>
-                    <th>Numero</th>
-                    <th>Código</th>
-                    <th>Fecha del Oficio</th>
-                    <th>Archivo PDF</th>
-                    <th class="text-center">Estado</th>
-                    <th>Fecha de Publicacion</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let oficio of oficios">
-                    <td>{{ oficio.numero }}</td>
-                    <td>{{ oficio.codigo }}</td>
-                    <td class="text-center">{{ oficio.fecha_envio | date: 'dd/MM/yyyy' }}</td>
-                    <td>{{ oficio.nombre_original_pdf }}</td>
-                    <td class="text-center">
-                      {{
-                        oficio.estado_publicacion ? "Publicado" : "No Publicado"
-                      }}
-                    </td>
-                    <td class="text-center">{{ oficio.fecha_publicacion | date: 'dd/MM/yyyy' }}</td>
-                    <th class="text-center">
+              <ngx-datatable
+                class="bootstrap"
+                [rows]="oficios"
+                [columnMode]="'force'"
+                [headerHeight]="50"
+                [footerHeight]="50"
+                [rowHeight]="'auto'"
+                [scrollbarH]="true"
+              >
+                <ngx-datatable-column name="Número" [headerClass]="'text-center'" [cellClass]="'text-center'">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row.numero }}
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Código" [headerClass]="'text-center'" [cellClass]="'text-center'">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row.codigo }}
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Fecha del Oficio" [headerClass]="'text-center'" [cellClass]="'text-center'">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row.fecha_envio | date: 'dd/MM/yyyy' }}
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Archivo PDF" [headerClass]="'text-center'" [cellClass]="'text-center'">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    <span class="truncate-cell" [title]="row.nombre_original_pdf">
+                      {{ row.nombre_original_pdf }}
+                    </span>
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Estado" [headerClass]="'text-center'" [cellClass]="'text-center'">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row.estado_publicacion ? 'Publicado' : 'No Publicado' }}
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Fecha de Publicación" [headerClass]="'text-center'" [cellClass]="'text-center'">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row.fecha_publicacion | date: 'dd/MM/yyyy' }}
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column
+                  name="Acciones"
+                  [sortable]="false"
+                  [canAutoResize]="false"
+                  [width]="120"
+                  [headerClass]="'text-center'"
+                  [cellClass]="'text-center'"
+                >
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    <div class="d-flex justify-content-center">
                       <button
-                        mat-raised-button
-                        color="primary"
-                        class="btn btn-warning text-white"
-                        (click)="abrirOficio(oficio.id)"
-                        [disabled]="oficio.estado_publicacion"
+                        class="btn btn-warning text-white btn-sm"
+                        (click)="abrirOficio(row.id)"
+                        [disabled]="row.estado_publicacion"
                       >
                         <i class="fas fa-edit"></i>
                       </button>
-                    </th>
-                  </tr>
-                </tbody>
-              </table>
+                    </div>
+                  </ng-template>
+                </ngx-datatable-column>
+              </ngx-datatable>
+
             </div>
             <ng-template #noOficios>
               <p>No hay oficios para mostrar.</p>
