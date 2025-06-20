@@ -51,6 +51,7 @@
                         accept="application/pdf"
                         (change)="onFileChange($event)"
                         class="form-control"
+                        #oficioInput
                       />
                     </div>
                     <div class="col-md-2 form-group">
@@ -199,11 +200,11 @@
                           Campo obligatorio
                         </div>
                         <span
-                          *ngIf="numeroExistenteMensaje"
+                          *ngIf="numeroExistenteMensajesResolucion[i]"
                           class="text-danger mt-1"
                           style="font-size: 0.875rem"
                         >
-                          {{ numeroExistenteMensaje }}
+                          {{ numeroExistenteMensajesResolucion[i] }}
                         </span>
                       </div>
 

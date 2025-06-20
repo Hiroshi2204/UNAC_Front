@@ -2,6 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormArray, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
 import { DocService } from '@core/service/doc.service';
+import { ViewChild, ElementRef } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
+
+
 
 @Component({
   selector: 'app-documento',
@@ -21,9 +25,11 @@ export class DocumentoComponent implements OnInit {
   oficios_existentes: any[] = [];  // Agregado para almacenar los documentos existentes
   numeroExistenteMensaje: string = '';
   numeroExistenteMensajeOficio: string = ''; // Agregado para el mensaje de advertencia
+  numeroExistenteMensajesResolucion: string[] = [];
   loading: boolean = false;
+  @ViewChild('oficioInput') oficioInputRef!: ElementRef<HTMLInputElement>;
 
-  constructor(private fb: FormBuilder, private docService: DocService) { }
+  constructor(private fb: FormBuilder, private docService: DocService, private cdr: ChangeDetectorRef) { }
 
   fechaHoy: string = '';
 
@@ -41,26 +47,14 @@ export class DocumentoComponent implements OnInit {
       }),
       resoluciones: this.fb.array([]),
     });
-
-
-    this.documentoForm.get('oficio.numero')?.valueChanges.subscribe(valor => {
-      this.buscarOficiosCoincidencias(valor);
-    });
-
-
-    //this.agregarResolucion();
-
-    // Verificar si el número de documento existe cuando cambia
-    this.documentoForm.get('oficio.numero')?.valueChanges.subscribe(valor => {
-      this.buscarCoincidencias(valor, 'oficio');
-    });
-
-    // Verificar las resoluciones cada vez que cambia el número
-    this.resoluciones.controls.forEach((res, index) => {
-      res.get('numero')?.valueChanges.subscribe(valor => {
-        this.buscarCoincidencias(valor, `resolucion-${index}`);
+    this.cargar_oficios_existentes().then(() => {
+      this.documentoForm.get('oficio.numero')?.valueChanges.subscribe(valor => {
+        this.buscarOficiosCoincidencias(valor);
+        this.buscarCoincidencias(valor, 'oficio');
       });
     });
+
+
   }
 
   formatearFecha(fecha: Date): string {
@@ -71,51 +65,55 @@ export class DocumentoComponent implements OnInit {
     return `${dia} de ${mes} ${anio}`;
   }
 
-
   buscarOficiosCoincidencias(valor: any) {
     if (!valor) {
       this.numeroExistenteMensajeOficio = '';
       return;
     }
 
-    // Eliminar ceros a la izquierda en el valor ingresado
-    const numeroIngresado = valor.replace(/^0+/, '');
-    console.log("Número ingresado:", numeroIngresado); // Depuración
+    const numeroIngresado = String(valor).replace(/^0+/, '').toLowerCase();
 
-    // Filtrar los oficios existentes, asegurándonos de comparar solo la parte numérica antes del guion
     const coincidencias = this.oficios_existentes.filter(doc => {
-      const numeroDoc = doc.codigo?.split('-')[0]?.replace(/^0+/, ''); // Extraemos solo la parte numérica antes del guion
-      console.log("Comparando con código:", numeroDoc); // Depuración
+      const numeroDoc = String(doc.numero)?.replace(/^0+/, '').toLowerCase();
       return numeroDoc === numeroIngresado;
     });
 
     if (coincidencias.length > 0) {
       const coincidenciasTexto = coincidencias.map(c => c.codigo).join(', ');
-      this.numeroExistenteMensajeOficio = `Ya existe un oficio con el número ${numeroIngresado} ( ${coincidenciasTexto})`;
+      this.numeroExistenteMensajeOficio = `Ya existe un oficio con el número "${numeroIngresado}"`;
     } else {
       this.numeroExistenteMensajeOficio = '';
     }
+    this.cdr.detectChanges();
   }
 
-  // Método para verificar si el número ya existe en los documentos
   buscarCoincidencias(valor: string, tipo: string) {
-    if (!valor) {
-      this.numeroExistenteMensaje = '';
-      return;
-    }
+    if (!valor) return;
 
-    const numeroIngresado = valor.replace(/^0+/, '');
+    const numeroIngresado = String(valor).replace(/^0+/, '');
+
 
     const coincidencias = this.documentos_existentes.filter(doc => {
       const numeroDoc = doc.num_anio?.split('-')[0]?.replace(/^0+/, '');
       return numeroDoc === numeroIngresado;
     });
 
-    if (coincidencias.length > 0) {
-      const coincidenciasTexto = coincidencias.map(c => c.num_anio).join(', ');
-      this.numeroExistenteMensaje = `Ya existe un documento con el número ${numeroIngresado} ( ${coincidenciasTexto})`;
-    } else {
-      this.numeroExistenteMensaje = '';
+    if (tipo.startsWith('resolucion-')) {
+      const index = parseInt(tipo.split('-')[1], 10);
+      if (coincidencias.length > 0) {
+        const coincidenciasTexto = coincidencias.map(c => c.num_anio).join(', ');
+        this.numeroExistenteMensajesResolucion = [
+          ...this.numeroExistenteMensajesResolucion.slice(0, index),
+          `Ya existe un documento con el número ${numeroIngresado} (${coincidenciasTexto})`,
+          ...this.numeroExistenteMensajesResolucion.slice(index + 1),
+        ];
+      } else {
+        this.numeroExistenteMensajesResolucion = [
+          ...this.numeroExistenteMensajesResolucion.slice(0, index),
+          '',
+          ...this.numeroExistenteMensajesResolucion.slice(index + 1),
+        ];
+      }
     }
   }
 
@@ -132,16 +130,19 @@ export class DocumentoComponent implements OnInit {
     });
   }
 
-  cargar_oficios_existentes() {
-    this.docService.getOficios().subscribe({
-      next: (res) => {
-        console.log(res)
-        this.oficios_existentes = res.documentos;
-      },
-      error: (err) => {
-        console.log(err)
-      }
-    })
+  cargar_oficios_existentes(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.docService.getOficios().subscribe({
+        next: (res) => {
+          this.oficios_existentes = res.oficios;
+          resolve();
+        },
+        error: (err) => {
+          console.error(err);
+          reject(err);
+        }
+      });
+    });
   }
 
   filtrar_documentos_existentes(id: any) {
@@ -187,6 +188,7 @@ export class DocumentoComponent implements OnInit {
       });
 
       this.resoluciones.push(resolucionForm);
+      this.numeroExistenteMensajesResolucion.push('');
       this.resolucionFiles.push(null!);
 
       resolucionForm.get('numero')?.valueChanges.subscribe(valor => {
@@ -322,8 +324,11 @@ export class DocumentoComponent implements OnInit {
 
         // Limpiar archivos
         this.oficioFile = null;
+        this.oficioInputRef.nativeElement.value = '';
         this.resolucionFiles = [];
         this.resoluciones.clear(); // limpia FormArray
+        this.cargar_oficios_existentes();
+        this.filtrar_documentos_existentes(oficioData.clase_documento_id); // si aplica
 
       },
       error: (err) => {
@@ -335,5 +340,5 @@ export class DocumentoComponent implements OnInit {
     });
   }
 
-  
+
 }

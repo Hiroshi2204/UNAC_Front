@@ -1,62 +1,45 @@
-import { Component, ViewChild, HostListener, OnInit } from '@angular/core';
-import { DatatableComponent, NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { MatDialogModule } from '@angular/material/dialog';
+import { Component, OnInit } from '@angular/core';
 import { DocService } from '@core/service/doc.service';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
-import { Modal1Component } from 'app/modal1/modal1.component';
-import { EditarOficioComponent } from '../editar-oficio/editar-oficio.component';
-import { Router, RouterLink } from '@angular/router';
-
+import { Router } from '@angular/router';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-editar-documento',
+  standalone: true,
   imports: [NgxDatatableModule, FormsModule, CommonModule, MatDialogModule, RouterLink],
   templateUrl: './editar-documento.component.html',
   styleUrl: './editar-documento.component.scss'
 })
 export class EditarDocumentoComponent implements OnInit {
-  dataLoaded: boolean = false;
-  oficios: any[] = [];
   loadingIndicator = true;
-  reorderable = true;
-  filtroBusqueda: string = '';
+  dataLoaded = false;
+
   todosLosOficios: any[] = [];
+  filtroBusqueda: string = '';
 
-  constructor(private docService: DocService, private dialog: MatDialog, private router: Router) { }
+  paginaActual: number = 1;
+  itemsPorPagina: number = 10;
 
+  constructor(
+    private docService: DocService,
+    private dialog: MatDialog,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
-    this.loadingIndicator = true;
-    this.dataLoaded = false;
-    this.cargarOficios();
-    
+    this.cargarTodosLosOficios();
   }
 
-  cargarOficios() {
-    this.docService.getOficios1().subscribe({
-      next: (res) => {
-        // Ajusta según la estructura que regresa tu API
-        this.todosLosOficios = [...res.oficios];
-        this.oficios = res.oficios;
-        this.loadingIndicator = false; // ✅ Apagar loader aquí
-        this.dataLoaded = true;
-        //console.log(this.oficios)
-      },
-      error: (err) => {
-        console.error('Error al cargar oficios:', err);
-        this.loadingIndicator = false; // También apagar si hay error
-      }
-    });
-  }
-  abrirOficio(id: number) {
-    this.router.navigate(['/apps/editar-oficio'], { queryParams: { id } });
-  }
-
-  filtrarOficios() {
+  get oficiosFiltrados(): any[] {
     const termino = this.filtroBusqueda.toLowerCase().trim();
-    this.oficios = this.todosLosOficios.filter((oficio) => {
+    if (!termino) return this.todosLosOficios;
+
+    return this.todosLosOficios.filter((oficio) => {
       const numero = oficio?.numero?.toLowerCase() || '';
       const codigo = oficio?.codigo?.toLowerCase() || '';
       const pdf = oficio?.nombre_original_pdf?.toLowerCase() || '';
@@ -70,4 +53,44 @@ export class EditarDocumentoComponent implements OnInit {
     });
   }
 
+  get oficiosPaginados(): any[] {
+    const inicio = (this.paginaActual - 1) * this.itemsPorPagina;
+    return this.oficiosFiltrados.slice(inicio, inicio + this.itemsPorPagina);
+  }
+
+  get totalPaginas(): number {
+    return Math.ceil(this.oficiosFiltrados.length / this.itemsPorPagina);
+  }
+
+  cargarTodosLosOficios(): void {
+    this.loadingIndicator = true;
+    this.docService.getOficios1().subscribe({
+      next: (res) => {
+        this.todosLosOficios = res.oficios || res; // depende de tu API
+        this.todosLosOficios = res.oficios.sort((a: any, b: any) =>
+          new Date(b.fecha_envio).getTime() - new Date(a.fecha_envio).getTime()
+        );
+        this.loadingIndicator = false;
+        this.dataLoaded = true;
+      },
+      error: (err) => {
+        console.error('Error al cargar oficios:', err);
+        this.loadingIndicator = false;
+      }
+    });
+  }
+
+  cambiarPagina(pagina: number): void {
+    if (pagina >= 1 && pagina <= this.totalPaginas) {
+      this.paginaActual = pagina;
+    }
+  }
+
+  buscar() {
+    this.paginaActual = 1;
+  }
+
+  abrirOficio(id: number): void {
+    this.router.navigate(['/apps/editar-oficio'], { queryParams: { id } });
+  }
 }

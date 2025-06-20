@@ -1,36 +1,42 @@
-import { Component, ViewChild, HostListener, OnInit } from '@angular/core';
-import { DatatableComponent, NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { MatDialogModule } from '@angular/material/dialog';
+import { Component, OnInit } from '@angular/core';
 import { DocService } from '@core/service/doc.service';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
-import { Modal1Component } from 'app/modal1/modal1.component';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-publicados',
+  standalone: true,
   imports: [NgxDatatableModule, FormsModule, CommonModule, MatDialogModule],
   templateUrl: './publicados.component.html',
   styleUrl: './publicados.component.scss'
 })
-export class PublicadosComponent {
+export class PublicadosComponent implements OnInit {
   dataLoaded: boolean = false;
   oficios: any[] = [];
-  loadingIndicator = true;
-  reorderable = true;
-  filtroBusqueda: string = '';
   todosLosOficios: any[] = [];
+  loadingIndicator = true;
+  filtroBusqueda: string = '';
+  reorderable = true;
 
+  // Paginación
+  paginaActual: number = 1;
+  itemsPorPagina: number = 10;
+  totalPaginas: number = 0;
 
-  constructor(private docService: DocService, private dialog: MatDialog, private router: Router) { }
-
+  constructor(
+    private docService: DocService,
+    private dialog: MatDialog,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.loadingIndicator = true;
     this.dataLoaded = false;
     this.cargarOficios();
-
   }
 
   cargarOficios() {
@@ -39,52 +45,47 @@ export class PublicadosComponent {
         const oficiosOrdenados = res.oficios.sort((a: any, b: any) =>
           new Date(b.fecha_envio).getTime() - new Date(a.fecha_envio).getTime()
         );
-        // Ajusta según la estructura que regresa tu API
-        this.todosLosOficios = [...res.oficios];
-        this.oficios = res.oficios;
-        this.loadingIndicator = false; // ✅ Apagar loader aquí
+
+        this.todosLosOficios = oficiosOrdenados;
+        this.totalPaginas = Math.ceil(this.todosLosOficios.length / this.itemsPorPagina);
+        this.paginaActual = 1;
+        this.actualizarPaginacion();
+
+        this.loadingIndicator = false;
         this.dataLoaded = true;
-        //console.log(this.oficios)
       },
       error: (err) => {
         console.error('Error al cargar oficios:', err);
-        this.loadingIndicator = false; // También apagar si hay error
+        this.loadingIndicator = false;
       }
     });
   }
-  abrirOficio(id: number) {
-    this.router.navigate(['/apps/editar-oficio'], { queryParams: { id } });
+
+  actualizarPaginacion() {
+    const inicio = (this.paginaActual - 1) * this.itemsPorPagina;
+    const fin = inicio + this.itemsPorPagina;
+    this.oficios = this.todosLosOficios.slice(inicio, fin);
   }
 
-  // filtrarOficios() {
-  //   const termino = this.filtroBusqueda.toLowerCase().trim();
-  //   this.oficios = this.todosLosOficios.filter((oficio) => {
-  //     const numero = oficio?.numero?.toLowerCase() || '';
-  //     const codigo = oficio?.codigo?.toLowerCase() || '';
-  //     const pdf = oficio?.nombre_original_pdf?.toLowerCase() || '';
-  //     const estado = oficio.estado_publicacion ? 'publicado' : 'no publicado';
-  //     return (
-  //       numero.includes(termino) ||
-  //       codigo.includes(termino) ||
-  //       pdf.includes(termino) ||
-  //       estado.includes(termino)
-  //     );
-  //   });
-  // }
+  cambiarPagina(pagina: number) {
+    if (pagina >= 1 && pagina <= this.totalPaginas) {
+      this.paginaActual = pagina;
+      this.actualizarPaginacion();
+    }
+  }
+
   filtrarOficios() {
     const termino = this.filtroBusqueda.toLowerCase().trim();
 
-    // Asegúrate de que todosLosOficios esté definido y sea un array
     if (!this.todosLosOficios || !Array.isArray(this.todosLosOficios)) {
       this.oficios = [];
       return;
     }
 
-    // Filtrado
     const oficiosFiltrados = this.todosLosOficios.filter((oficio) => {
       const numero = oficio?.numero?.toLowerCase() || '';
       const codigo = oficio?.codigo?.toLowerCase() || '';
-      const fecha_envio = oficio?.fecha_envio?.toLowerCase() || '';
+      const fecha_envio = oficio?.fecha_envio?.toLowerCase?.() || '';
       const pdf = oficio?.nombre_original_pdf?.toLowerCase() || '';
       const estado = oficio.estado_publicacion ? 'publicado' : 'no publicado';
 
@@ -97,10 +98,18 @@ export class PublicadosComponent {
       );
     });
 
-    // Ordenar por fecha_envio descendente
-    this.oficios = oficiosFiltrados.sort((a: any, b: any) =>
+    // Ordenar por fecha descendente
+    this.todosLosOficios = oficiosFiltrados.sort((a: any, b: any) =>
       new Date(b.fecha_envio || 0).getTime() - new Date(a.fecha_envio || 0).getTime()
     );
+
+    this.totalPaginas = Math.ceil(this.todosLosOficios.length / this.itemsPorPagina);
+    this.paginaActual = 1;
+    this.actualizarPaginacion();
+  }
+
+  abrirOficio(id: number) {
+    this.router.navigate(['/apps/editar-oficio'], { queryParams: { id } });
   }
 
   despublicarOficio(id: number) {
@@ -109,9 +118,8 @@ export class PublicadosComponent {
     this.loadingIndicator = true;
 
     this.docService.despublicar(id).subscribe({
-      next: (res) => {
-        console.log('Despublicado correctamente');
-        this.cargarOficios(); // Refresca la lista
+      next: () => {
+        this.cargarOficios();
       },
       error: (err) => {
         console.error('Error al despublicar', err);
@@ -119,5 +127,4 @@ export class PublicadosComponent {
       }
     });
   }
-
 }

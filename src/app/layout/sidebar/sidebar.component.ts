@@ -20,6 +20,7 @@ import { FeatherModule } from 'angular-feather';
 import { NgScrollbar } from 'ngx-scrollbar';
 import { AuthService } from '@core';
 import { SidebarService } from './sidebar.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-sidebar',
@@ -32,6 +33,7 @@ import { SidebarService } from './sidebar.service';
     NgClass,
     FeatherModule,
     TranslateModule,
+    CommonModule,
   ],
 })
 export class SidebarComponent implements OnInit, OnDestroy {

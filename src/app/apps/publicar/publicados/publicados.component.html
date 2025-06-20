@@ -4,9 +4,7 @@
     <div class="row">
       <div class="col-12">
         <div class="card">
-          <div
-            class="card-header d-flex justify-content-between align-items-center"
-          >
+          <div class="card-header d-flex justify-content-between align-items-center">
             <h4>Lista de Publicados</h4>
             <div class="input-group" style="max-width: 600px">
               <input
@@ -21,19 +19,13 @@
               </span>
             </div>
           </div>
-          <div
-            *ngIf="loadingIndicator"
-            class="d-flex justify-content-center align-items-center"
-            style="height: 200px"
-          >
-            <div
-              class="spinner-border text-primary"
-              role="status"
-              style="width: 3rem; height: 3rem"
-            >
+
+          <div *ngIf="loadingIndicator" class="d-flex justify-content-center align-items-center" style="height: 200px">
+            <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem">
               <span class="visually-hidden">Cargando...</span>
             </div>
           </div>
+
           <div class="card-body">
             <div *ngIf="oficios && oficios.length > 0; else noOficios">
               <table class="table table-bordered">
@@ -52,31 +44,53 @@
                   <tr *ngFor="let oficio of oficios">
                     <td>{{ oficio.numero }}</td>
                     <td>{{ oficio.codigo }}</td>
-                    <td class="text-center">
-                      {{ oficio.fecha_envio | date : "dd/MM/yyyy" }}
-                    </td>
+                    <td class="text-center">{{ oficio.fecha_envio | date: "dd/MM/yyyy" }}</td>
                     <td>{{ oficio.nombre_original_pdf }}</td>
                     <td class="text-center">
-                      {{
-                        oficio.estado_publicacion ? "Publicado" : "No Publicado"
-                      }}
+                      {{ oficio.estado_publicacion ? "Publicado" : "No Publicado" }}
                     </td>
+                    <td class="text-center">{{ oficio.fecha_publicacion | date: "dd/MM/yyyy" }}</td>
                     <td class="text-center">
-                      {{ oficio.fecha_publicacion | date : "dd/MM/yyyy" }}
-                    </td>
-                    <th class="text-center">
                       <button
-                      class="btn btn-outline-info text-blue"
-                      (click)="despublicarOficio(oficio.id)"
-                      title="Despublicar"
-                    >
-                      <i class="bi bi-arrow-down-left-circle-fill"></i>
-                    </button>
-                    </th>
+                        class="btn btn-outline-info text-blue"
+                        (click)="despublicarOficio(oficio.id)"
+                        title="Despublicar"
+                      >
+                        <i class="bi bi-arrow-down-left-circle-fill"></i>
+                      </button>
+                    </td>
                   </tr>
                 </tbody>
               </table>
+
+              <!-- 🔽 Paginación Bootstrap -->
+              <nav *ngIf="totalPaginas > 1" aria-label="Page navigation">
+                <ul class="pagination justify-content-center mt-3">
+                  <li class="page-item" [class.disabled]="paginaActual === 1">
+                    <button class="page-link" (click)="cambiarPagina(paginaActual - 1)">
+                      &laquo;
+                    </button>
+                  </li>
+
+                  <li
+                    class="page-item"
+                    *ngFor="let page of [].constructor(totalPaginas); let i = index"
+                    [class.active]="paginaActual === i + 1"
+                  >
+                    <button class="page-link" (click)="cambiarPagina(i + 1)">
+                      {{ i + 1 }}
+                    </button>
+                  </li>
+
+                  <li class="page-item" [class.disabled]="paginaActual === totalPaginas">
+                    <button class="page-link" (click)="cambiarPagina(paginaActual + 1)">
+                      &raquo;
+                    </button>
+                  </li>
+                </ul>
+              </nav>
             </div>
+
             <ng-template #noOficios>
               <p>No hay oficios para mostrar.</p>
             </ng-template>
