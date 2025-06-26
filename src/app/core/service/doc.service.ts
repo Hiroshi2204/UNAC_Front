@@ -25,8 +25,8 @@ export class DocService {
   }
 
 
-  buscarDoc(nombre: any, numero: any, resumen: any, detalle: any, fecha_doc: any, oficina_id: any, page: any): Observable<any> {
-    const params = { nombre: nombre, numero: numero, resumen: resumen, detalle: detalle, fecha_doc: fecha_doc, oficina_id: oficina_id, page: page };
+  buscarDoc(nombre: any, numero: any, resumen: any, detalle: any, fecha_doc: any, fecha_inicio: any, fecha_fin: any, ordenCampo: any, ordenDireccion: any, oficina_id: any, page: any): Observable<any> {
+    const params = { nombre: nombre, numero: numero, resumen: resumen, detalle: detalle, fecha_doc: fecha_doc,fecha_inicio, fecha_fin, ordenCampo, ordenDireccion, oficina_id: oficina_id, page: page };
 
     return this.http.get<any>(`${environment.apiUrl}/api/documentos/buscar/busqueda_documentos_parametros`, { params });
   }
