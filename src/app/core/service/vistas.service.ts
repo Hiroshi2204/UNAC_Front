@@ -39,6 +39,16 @@ export class VistasService {
     });
   }
 
+  getDocumentosFacultades(): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/api/vistas/get/documentos/facultades`, {
+    });
+  }
+
+  getDocumentosNormas(): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/api/vistas/get/normas_resoluciones/clase_documentos`, {
+    });
+  }
+
 
   getOficios(): Observable<any> {
     return this.http.get<any>(`${environment.apiUrl}/api/documentos/get/oficio`);
@@ -55,10 +65,16 @@ export class VistasService {
     return this.http.get(`${environment.apiUrl}/api/oficios/get_id?id=${id}`);
   }
 
-  vistarDoc(nombre: any, numero: any, resumen: any, detalle: any, fecha_doc: any, fecha_inicio: any, fecha_fin: any, ordenCampo: any, ordenDireccion: any, oficina_id: any, page: any): Observable<any> {
+  vistarDocFacultades(nombre: any, numero: any, resumen: any, detalle: any, fecha_doc: any, fecha_inicio: any, fecha_fin: any, ordenCampo: any, ordenDireccion: any, oficina_id: any, page: any): Observable<any> {
     const params = { nombre: nombre, numero: numero, resumen: resumen, detalle: detalle, fecha_doc: fecha_doc, fecha_inicio, fecha_fin, ordenCampo, ordenDireccion, oficina_id: oficina_id, page: page };
 
-    return this.http.get<any>(`${environment.apiUrl}/api/vistas/documentos`, { params });
+    return this.http.get<any>(`${environment.apiUrl}/api/vistas/buscar/documentos/facultades`, { params });
+  }
+
+  vistarDocNormas_Resoluciones(nombre: any, numero: any, resumen: any, detalle: any, fecha_doc: any, fecha_inicio: any, fecha_fin: any, ordenCampo: any, ordenDireccion: any, oficina_id: any, clase_documento_id: any, page: any): Observable<any> {
+    const params = { nombre: nombre, numero: numero, resumen: resumen, detalle: detalle, fecha_doc: fecha_doc, fecha_inicio, fecha_fin, ordenCampo, ordenDireccion, oficina_id: oficina_id, clase_documento_id: clase_documento_id, page: page };
+
+    return this.http.get<any>(`${environment.apiUrl}/api/vistas/buscar/documentos/facultades`, { params });
   }
 
 
