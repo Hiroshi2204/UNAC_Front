@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './vista-resolucion.component.html',
   styleUrl: './vista-resolucion.component.scss'
 })
-export class VistaResolucionComponent implements OnInit{
+export class VistaResolucionComponent implements OnInit {
   dataLoaded: boolean = false; // nuevo flag
 
   rows: any[] = [];
@@ -31,11 +31,13 @@ export class VistaResolucionComponent implements OnInit{
     fecha_fin: '',    // nueva propiedad
     resumen: '',
     detalle: '',
-    oficina_remitente: ''
+    oficina_remitente: '',
+    clase_documento: ''
   };
   oficinas!: any[]
   ordenCampo: string = '';
   ordenDireccion: string = '';
+  
 
   @ViewChild('table') table!: DatatableComponent;
 
@@ -48,6 +50,7 @@ export class VistaResolucionComponent implements OnInit{
     this.loadingIndicator = false;
     this.dataLoaded = false;
     this.getOficinas();
+    this.getDocumentos();
 
     //validar que el usuario sea admin para mostrar el boton eliminar
     const userData = localStorage.getItem('currentUser');
@@ -58,8 +61,6 @@ export class VistaResolucionComponent implements OnInit{
       this.usuario_admin = usuario?.rol?.rol === 'ADMIN';
 
     }
-
-
 
   }
 
@@ -98,6 +99,19 @@ export class VistaResolucionComponent implements OnInit{
 
   }
 
+  getDocumentos() {
+    this.docService.getDocumentosNormas().subscribe({
+      next: (res) => {
+        console.log(res)
+        this.oficinas = res.documentos
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    })
+
+  }
+
 
   buscarDocumento(pagina: number): void {
     // Validar que al menos un filtro tenga valor
@@ -121,10 +135,11 @@ export class VistaResolucionComponent implements OnInit{
     const fecha_inicio = this.filtros.fecha_inicio?.trim() || '';
     const fecha_fin = this.filtros.fecha_fin?.trim() || '';
     const oficina_id = this.filtros.oficina_remitente || '';
+    const clase_documento_id = this.filtros.clase_documento || '';
 
 
     // Llamar al servicio con los filtros individuales
-    this.docService.vistarDoc(nombre, numero, resumen, detalle, fecha_doc, fecha_inicio, fecha_fin, this.ordenCampo, this.ordenDireccion, oficina_id, pagina).subscribe({
+    this.docService.vistarDocNormas_Resoluciones(nombre, numero, resumen, detalle, fecha_doc, fecha_inicio, fecha_fin, this.ordenCampo, this.ordenDireccion, oficina_id, clase_documento_id, pagina).subscribe({
       next: (res) => {
         const respuesta = res;
         console.log(respuesta)
