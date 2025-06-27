@@ -7,7 +7,7 @@
   <div class="section-body">
     <div class="row">
       <div class="col-12">
-        <div class="card">
+        <div class="card full-width-header">
           <div class="card-header">
             <h4>Buscar Documento</h4>
           </div>
@@ -51,16 +51,6 @@
             </div>
 
             <div class="row align-items-end mb-3">
-              <!-- <div class="col-md-2">
-                <label for="fecha">Fecha de emisión</label>
-                <input
-                  [(ngModel)]="filtros.fecha"
-                  name="fecha"
-                  type="date"
-                  class="form-control"
-                />
-              </div> -->
-
               <div class="col-md-2">
                 <label for="fecha_inicio">Fecha desde</label>
                 <input
@@ -160,6 +150,12 @@
                     </ng-template>
                   </ngx-datatable-column>
 
+                  <ngx-datatable-column name="Oficina">
+                    <ng-template let-row="row" ngx-datatable-cell-template>
+                      {{ row.oficina_remitente }}
+                    </ng-template>
+                  </ngx-datatable-column>
+
                   <ngx-datatable-column name="Resumen">
                     <ng-template let-row="row" ngx-datatable-cell-template>
                       {{ row.resumen }}
@@ -172,17 +168,11 @@
                     </ng-template>
                   </ngx-datatable-column>
 
-                  <ngx-datatable-column name="Oficio">
+                  <!-- <ngx-datatable-column name="Oficio">
                     <ng-template let-row="row" ngx-datatable-cell-template>
                       {{ row.oficio.numero }}
                     </ng-template>
-                  </ngx-datatable-column>
-
-                  <ngx-datatable-column name="Oficina">
-                    <ng-template let-row="row" ngx-datatable-cell-template>
-                      {{ row.oficina_remitente }}
-                    </ng-template>
-                  </ngx-datatable-column>
+                  </ngx-datatable-column> -->
 
                   <ngx-datatable-column name="Archivo PDF">
                     <ng-template let-row="row" ngx-datatable-cell-template>
@@ -208,13 +198,6 @@
                           "
                         >
                           <i class="fa fa-download"></i>
-                        </button>
-                        <button
-                          *ngIf="usuario_admin"
-                          class="btn btn-sm btn-danger"
-                          (click)="eliminarDocumento(row.id)"
-                        >
-                          <i class="fa fa-trash"></i>
                         </button>
                       </div>
                     </ng-template>

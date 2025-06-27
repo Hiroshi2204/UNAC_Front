@@ -109,5 +109,11 @@ export const APP_ROUTE: Route[] = [
         loadChildren: () =>
             import('./authentication/auth.routes').then((m) => m.AUTH_ROUTE),
     },
+    {
+        path: 'public',
+        loadChildren: () =>
+            import('../app/vistas/vista.routes').then((m) => m.VISTA_ROUTE),
+    },
+    // DEJA SOLO UN 404 AL FINAL
     { path: '**', component: Page404Component },
 ];

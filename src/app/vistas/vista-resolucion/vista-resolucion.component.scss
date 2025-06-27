@@ -1,0 +1,8 @@
+.full-width-header {
+  width: 85vw; /* ancho total del viewport */
+  margin-left: calc(-1 * ((100vw - 100%) / 2)); /* compensa el padding del contenedor padre */
+  background-color: #f8f9fa; /* opcional: igual al card-body */
+  padding-left: 2rem;
+  padding-right: 2rem;
+  border-bottom: 1px solid #dee2e6; /* línea inferior como separación */
+}

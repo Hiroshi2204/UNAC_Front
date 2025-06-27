@@ -6,12 +6,11 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
-import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-editar-documento',
   standalone: true,
-  imports: [NgxDatatableModule, FormsModule, CommonModule, MatDialogModule, RouterLink],
+  imports: [NgxDatatableModule, FormsModule, CommonModule, MatDialogModule],
   templateUrl: './editar-documento.component.html',
   styleUrl: './editar-documento.component.scss'
 })

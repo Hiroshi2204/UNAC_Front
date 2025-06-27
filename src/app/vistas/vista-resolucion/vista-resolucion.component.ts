@@ -1,17 +1,17 @@
 import { Component, ViewChild, HostListener, OnInit } from '@angular/core';
 import { DatatableComponent, NgxDatatableModule } from '@swimlane/ngx-datatable';
 
-import { DocService } from '@core/service/doc.service';
+import { VistasService } from '@core/service/vistas.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-buscar-documento',
+  selector: 'app-vista-resolucion',
   imports: [NgxDatatableModule, FormsModule, CommonModule],
-  templateUrl: './buscar-documento.component.html',
-  styleUrl: './buscar-documento.component.scss'
+  templateUrl: './vista-resolucion.component.html',
+  styleUrl: './vista-resolucion.component.scss'
 })
-export class BuscarDocumentoComponent implements OnInit {
+export class VistaResolucionComponent implements OnInit{
   dataLoaded: boolean = false; // nuevo flag
 
   rows: any[] = [];
@@ -39,7 +39,7 @@ export class BuscarDocumentoComponent implements OnInit {
 
   @ViewChild('table') table!: DatatableComponent;
 
-  constructor(private docService: DocService) {
+  constructor(private docService: VistasService) {
 
   }
 
@@ -47,7 +47,7 @@ export class BuscarDocumentoComponent implements OnInit {
 
     this.loadingIndicator = false;
     this.dataLoaded = false;
-    this.getOficinasId();
+    this.getOficinas();
 
     //validar que el usuario sea admin para mostrar el boton eliminar
     const userData = localStorage.getItem('currentUser');
@@ -85,8 +85,8 @@ export class BuscarDocumentoComponent implements OnInit {
     });
   }
 
-  getOficinasId() {
-    this.docService.getOficinas(1).subscribe({
+  getOficinas() {
+    this.docService.getOficinasFacultades().subscribe({
       next: (res) => {
         console.log(res)
         this.oficinas = res.documentos
@@ -96,18 +96,6 @@ export class BuscarDocumentoComponent implements OnInit {
       }
     })
 
-  }
-
-  eliminarDocumento(id: any) {
-    this.docService.eliminarDoc(id).subscribe({
-      next: () => {
-        console.log("archivo eliminado");
-        this.buscarDocumento(this.paginaActual);
-      },
-      error: (err) => {
-        console.error(err);
-      }
-    });
   }
 
 
@@ -133,10 +121,10 @@ export class BuscarDocumentoComponent implements OnInit {
     const fecha_inicio = this.filtros.fecha_inicio?.trim() || '';
     const fecha_fin = this.filtros.fecha_fin?.trim() || '';
     const oficina_id = this.filtros.oficina_remitente || '';
-    
+
 
     // Llamar al servicio con los filtros individuales
-    this.docService.buscarDoc(nombre, numero, resumen, detalle, fecha_doc, fecha_inicio, fecha_fin,this.ordenCampo,this.ordenDireccion, oficina_id, pagina).subscribe({
+    this.docService.vistarDoc(nombre, numero, resumen, detalle, fecha_doc, fecha_inicio, fecha_fin, this.ordenCampo, this.ordenDireccion, oficina_id, pagina).subscribe({
       next: (res) => {
         const respuesta = res;
         console.log(respuesta)
@@ -150,11 +138,6 @@ export class BuscarDocumentoComponent implements OnInit {
           this.dataLoaded = true;
           return;
         }
-
-        // this.rows = respuesta.data.map((doc: any) => ({
-        //   ...doc,
-        //   archivo_pdf: doc.pdf_path
-        // }));
 
         this.rows = respuesta.data.map((doc: any) => {
           const fechaOriginal = doc.fecha_doc;
@@ -192,11 +175,11 @@ export class BuscarDocumentoComponent implements OnInit {
   }
 
   onSort(event: any) {
-  const sort = event.sorts[0];
-  this.ordenCampo = sort.prop;
-  this.ordenDireccion = sort.dir;
-  this.buscarDocumento(this.paginaActual);
-}
+    const sort = event.sorts[0];
+    this.ordenCampo = sort.prop;
+    this.ordenDireccion = sort.dir;
+    this.buscarDocumento(this.paginaActual);
+  }
 
 
   @HostListener('window:resize', ['$event'])
@@ -207,4 +190,5 @@ export class BuscarDocumentoComponent implements OnInit {
       this.table.recalculateColumns();
     }
   }
+
 }
