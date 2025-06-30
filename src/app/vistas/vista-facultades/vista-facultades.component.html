@@ -128,9 +128,11 @@
               [rowHeight]="'auto'"
               [scrollbarH]="scrollBarHorizontal"
             >
-              <ngx-datatable-column name="Nombre">
+              <ngx-datatable-column name="Nombre" [width]="250">
                 <ng-template let-row="row" ngx-datatable-cell-template>
-                  {{ row.nombre }}
+                  <span class="truncate-cell" [title]="row.nombre">
+                    {{ row.nombre }}
+                  </span>
                 </ng-template>
               </ngx-datatable-column>
 
@@ -140,9 +142,11 @@
                 </ng-template>
               </ngx-datatable-column>
 
-              <ngx-datatable-column name="Facultad">
+              <ngx-datatable-column name="Facultad" [width]="200">
                 <ng-template let-row="row" ngx-datatable-cell-template>
-                  {{ row.oficina_remitente }}
+                  <span class="truncate-cell" [title]="row.oficina_remitente">
+                    {{ row.oficina_remitente }}
+                  </span>
                 </ng-template>
               </ngx-datatable-column>
 
@@ -152,32 +156,32 @@
                 </ng-template>
               </ngx-datatable-column>
 
-              <ngx-datatable-column name="Archivo PDF">
+              <ngx-datatable-column name="Archivo PDF" [width]="350">
                 <ng-template let-row="row" ngx-datatable-cell-template>
-                  {{ row.nombre_original_pdf || "No disponible" }}
+                  <span class="truncate-pdf" [title]="row.nombre_original_pdf">
+                    {{ row.nombre_original_pdf || "No disponible" }}
+                  </span>
                 </ng-template>
               </ngx-datatable-column>
 
               <ngx-datatable-column
-                  name="Acciones"
-                  [sortable]="false"
-                  [canAutoResize]="false"
-                  [width]="150"
-                  [headerClass]="'text-center'"
-                >
-                  <ng-template let-row="row" ngx-datatable-cell-template>
-                    <div
-                      class="d-flex justify-content-center align-items-center"
+                name="Acciones"
+                [sortable]="false"
+                [canAutoResize]="false"
+                [width]="150"
+                [headerClass]="'text-center'"
+              >
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                  <div class="d-flex justify-content-center align-items-center">
+                    <button
+                      class="btn btn-sm btn-primary me-1"
+                      (click)="descargarDoc(row.id, row.nombre_original_pdf)"
                     >
-                      <button
-                        class="btn btn-sm btn-primary me-1"
-                        (click)="descargarDoc(row.id, row.nombre_original_pdf)"
-                      >
-                        <i class="fa fa-download"></i>
-                      </button>
-                    </div>
-                  </ng-template>
-                </ngx-datatable-column>
+                      <i class="fa fa-download"></i>
+                    </button>
+                  </div>
+                </ng-template>
+              </ngx-datatable-column>
             </ngx-datatable>
           </div>
 
@@ -208,7 +212,7 @@
                 class="bootstrap"
                 [rows]="rows"
                 [columns]="[]"
-                [columnMode]="'force'"
+                [columnMode]="'standard'"
                 [headerHeight]="50"
                 [footerHeight]="50"
                 [rowHeight]="'auto'"
@@ -219,9 +223,11 @@
                 (page)="onPageChange($event)"
                 (sort)="onSort($event)"
               >
-                <ngx-datatable-column name="Nombre">
+                <ngx-datatable-column name="Nombre" [width]="250">
                   <ng-template let-row="row" ngx-datatable-cell-template>
-                    {{ row.nombre }}
+                    <span class="truncate-cell" [title]="row.nombre">
+                      {{ row.nombre }}
+                    </span>
                   </ng-template>
                 </ngx-datatable-column>
 
@@ -231,15 +237,19 @@
                   </ng-template>
                 </ngx-datatable-column>
 
-                <ngx-datatable-column name="Oficina">
+                <ngx-datatable-column name="Facultad" [width]="200">
                   <ng-template let-row="row" ngx-datatable-cell-template>
-                    {{ row.oficina_remitente }}
+                    <span class="truncate-cell" [title]="row.oficina_remitente">
+                      {{ row.oficina_remitente }}
+                    </span>
                   </ng-template>
                 </ngx-datatable-column>
 
                 <ngx-datatable-column name="Resumen">
                   <ng-template let-row="row" ngx-datatable-cell-template>
-                    {{ row.resumen }}
+                    <span class="truncate-cell" [title]="row.resumen">
+                      {{ row.resumen }}
+                    </span>
                   </ng-template>
                 </ngx-datatable-column>
 
@@ -249,9 +259,14 @@
                   </ng-template>
                 </ngx-datatable-column>
 
-                <ngx-datatable-column name="Archivo PDF">
+                <ngx-datatable-column name="Archivo PDF" [width]="350">
                   <ng-template let-row="row" ngx-datatable-cell-template>
-                    {{ row.nombre_original_pdf || "No disponible" }}
+                    <span
+                      class="truncate-pdf"
+                      [title]="row.nombre_original_pdf"
+                    >
+                      {{ row.nombre_original_pdf || "No disponible" }}
+                    </span>
                   </ng-template>
                 </ngx-datatable-column>
 

@@ -137,7 +137,7 @@
                   class="bootstrap"
                   [rows]="rows"
                   [columns]="[]"
-                  [columnMode]="'force'"
+                  [columnMode]="'standard'"
                   [headerHeight]="50"
                   [footerHeight]="50"
                   [rowHeight]="'auto'"
@@ -150,7 +150,9 @@
                 >
                   <ngx-datatable-column name="Nombre">
                     <ng-template let-row="row" ngx-datatable-cell-template>
-                      {{ row.nombre }}
+                      <span class="truncate-cell" [title]="row.nombre">
+                        {{ row.nombre }}
+                      </span>
                     </ng-template>
                   </ngx-datatable-column>
 
@@ -162,7 +164,9 @@
 
                   <ngx-datatable-column name="Resumen">
                     <ng-template let-row="row" ngx-datatable-cell-template>
-                      {{ row.resumen }}
+                      <span class="truncate-cell" [title]="row.resumen">
+                        {{ row.resumen }}
+                      </span>
                     </ng-template>
                   </ngx-datatable-column>
 
@@ -174,19 +178,29 @@
 
                   <ngx-datatable-column name="Oficio">
                     <ng-template let-row="row" ngx-datatable-cell-template>
-                      {{ row.oficio.numero }}
+                      {{ row.oficio?.numero || "Sin Oficio" }}
                     </ng-template>
                   </ngx-datatable-column>
 
                   <ngx-datatable-column name="Oficina">
                     <ng-template let-row="row" ngx-datatable-cell-template>
-                      {{ row.oficina_remitente }}
+                      <span
+                        class="truncate-cell"
+                        [title]="row.oficina_remitente"
+                      >
+                        {{ row.oficina_remitente }}
+                      </span>
                     </ng-template>
                   </ngx-datatable-column>
 
                   <ngx-datatable-column name="Archivo PDF">
                     <ng-template let-row="row" ngx-datatable-cell-template>
-                      {{ row.nombre_original_pdf || "No disponible" }}
+                      <span
+                        class="truncate-cell"
+                        [title]="row.nombre_original_pdf"
+                      >
+                        {{ row.nombre_original_pdf || "No disponible" }}
+                      </span>
                     </ng-template>
                   </ngx-datatable-column>
 

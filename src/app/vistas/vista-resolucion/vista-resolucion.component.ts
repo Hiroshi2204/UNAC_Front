@@ -35,6 +35,7 @@ export class VistaResolucionComponent implements OnInit {
     clase_documento: ''
   };
   oficinas!: any[]
+  documentos!: any[]
   ordenCampo: string = '';
   ordenDireccion: string = '';
   
@@ -103,7 +104,7 @@ export class VistaResolucionComponent implements OnInit {
     this.docService.getDocumentosNormas().subscribe({
       next: (res) => {
         console.log(res)
-        this.oficinas = res.documentos
+        this.documentos = res.documentos
       },
       error: (err) => {
         console.log(err)
@@ -157,8 +158,7 @@ export class VistaResolucionComponent implements OnInit {
         this.rows = respuesta.data.map((doc: any) => {
           const fechaOriginal = doc.fecha_doc;
           const fechaFormateada = fechaOriginal
-            ? `${new Date(fechaOriginal).getDate().toString().padStart(2, '0')}/${(new Date(fechaOriginal).getMonth() + 1).toString().padStart(2, '0')
-            }/${new Date(fechaOriginal).getFullYear()}`
+            ? fechaOriginal.substring(8, 10) + '/' + fechaOriginal.substring(5, 7) + '/' + fechaOriginal.substring(0, 4)
             : '';
 
           return {

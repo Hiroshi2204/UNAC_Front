@@ -64,11 +64,11 @@ export class VistaFacultadesComponent implements OnInit {
     this.docService.getDocumentosFacultades().subscribe({
       next: (res) => {
         this.documentosFacultades = (res.documentos || [])
-          .sort((a: any, b: any) => new Date(b.fecha_doc).getTime() - new Date(a.fecha_doc).getTime()) // 📌 Ordenar DESC
+          .sort((a: any, b: any) => new Date(b.fecha_doc).getTime() - new Date(a.fecha_doc).getTime())
           .map((doc: any) => {
             const fechaOriginal = doc.fecha_doc;
             const fechaFormateada = fechaOriginal
-              ? `${new Date(fechaOriginal).getDate().toString().padStart(2, '0')}/${(new Date(fechaOriginal).getMonth() + 1).toString().padStart(2, '0')}/${new Date(fechaOriginal).getFullYear()}`
+              ? fechaOriginal.substring(8, 10) + '/' + fechaOriginal.substring(5, 7) + '/' + fechaOriginal.substring(0, 4)
               : '';
 
             return {
@@ -164,10 +164,14 @@ export class VistaFacultadesComponent implements OnInit {
         }
 
         this.rows = respuesta.data.map((doc: any) => {
+          // const fechaOriginal = doc.fecha_doc;
+          // const fechaFormateada = fechaOriginal
+          //   ? `${new Date(fechaOriginal).getDate().toString().padStart(2, '0')}/${(new Date(fechaOriginal).getMonth() + 1).toString().padStart(2, '0')
+          //   }/${new Date(fechaOriginal).getFullYear()}`
+          //   : '';
           const fechaOriginal = doc.fecha_doc;
           const fechaFormateada = fechaOriginal
-            ? `${new Date(fechaOriginal).getDate().toString().padStart(2, '0')}/${(new Date(fechaOriginal).getMonth() + 1).toString().padStart(2, '0')
-            }/${new Date(fechaOriginal).getFullYear()}`
+            ? fechaOriginal.substring(8, 10) + '/' + fechaOriginal.substring(5, 7) + '/' + fechaOriginal.substring(0, 4)
             : '';
 
           return {

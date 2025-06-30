@@ -61,3 +61,27 @@
     transform: translateY(0);
   }
 }
+
+::ng-deep ngx-datatable .datatable-body-cell,
+::ng-deep ngx-datatable .datatable-header-cell {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+::ng-deep ngx-datatable .datatable-body-cell span.truncate-cell {
+  display: inline-block;
+  max-width: 120px; /* Ajusta al gusto */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
+::ng-deep ngx-datatable .datatable-body-cell span.truncate-pdf {
+  display: inline-block;
+  max-width: 350px; /* o el valor que desees */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}

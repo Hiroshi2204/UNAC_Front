@@ -1,0 +1,15 @@
+::ng-deep ngx-datatable .datatable-body-cell,
+::ng-deep ngx-datatable .datatable-header-cell {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+::ng-deep .truncate-cell {
+  display: inline-block;
+  max-width: 120px; /* Ajusta si quieres más espacio */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
