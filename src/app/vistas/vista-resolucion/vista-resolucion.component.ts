@@ -38,7 +38,7 @@ export class VistaResolucionComponent implements OnInit {
   documentos!: any[]
   ordenCampo: string = '';
   ordenDireccion: string = '';
-  
+
 
   @ViewChild('table') table!: DatatableComponent;
 
@@ -194,6 +194,36 @@ export class VistaResolucionComponent implements OnInit {
     this.ordenCampo = sort.prop;
     this.ordenDireccion = sort.dir;
     this.buscarDocumento(this.paginaActual);
+  }
+
+  getPaginasParaMostrar(): (number | string)[] {
+    const total = this.total_paginas;
+    const actual = this.paginaActual;
+    const delta = 2;
+    const paginas: (number | string)[] = [];
+
+    const mostrarIzquierda = Math.max(2, actual - delta);
+    const mostrarDerecha = Math.min(total - 1, actual + delta);
+
+    paginas.push(1);
+
+    if (mostrarIzquierda > 2) {
+      paginas.push('...');
+    }
+
+    for (let i = mostrarIzquierda; i <= mostrarDerecha; i++) {
+      paginas.push(i);
+    }
+
+    if (mostrarDerecha < total - 1) {
+      paginas.push('...');
+    }
+
+    if (total > 1) {
+      paginas.push(total);
+    }
+
+    return paginas;
   }
 
 

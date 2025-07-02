@@ -61,3 +61,8 @@
     transform: translateY(0);
   }
 }
+.pagination .btn.active {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+}

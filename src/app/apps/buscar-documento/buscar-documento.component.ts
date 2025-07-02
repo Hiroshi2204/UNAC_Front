@@ -1,6 +1,6 @@
 import { Component, ViewChild, HostListener, OnInit } from '@angular/core';
 import { DatatableComponent, NgxDatatableModule } from '@swimlane/ngx-datatable';
-
+import dayjs from 'dayjs';
 import { DocService } from '@core/service/doc.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -133,10 +133,10 @@ export class BuscarDocumentoComponent implements OnInit {
     const fecha_inicio = this.filtros.fecha_inicio?.trim() || '';
     const fecha_fin = this.filtros.fecha_fin?.trim() || '';
     const oficina_id = this.filtros.oficina_remitente || '';
-    
+
 
     // Llamar al servicio con los filtros individuales
-    this.docService.buscarDoc(nombre, numero, resumen, detalle, fecha_doc, fecha_inicio, fecha_fin,this.ordenCampo,this.ordenDireccion, oficina_id, pagina).subscribe({
+    this.docService.buscarDoc(nombre, numero, resumen, detalle, fecha_doc, fecha_inicio, fecha_fin, this.ordenCampo, this.ordenDireccion, oficina_id, pagina).subscribe({
       next: (res) => {
         const respuesta = res;
         console.log(respuesta)
@@ -157,10 +157,8 @@ export class BuscarDocumentoComponent implements OnInit {
         // }));
 
         this.rows = respuesta.data.map((doc: any) => {
-          const fechaOriginal = doc.fecha_doc;
-          const fechaFormateada = fechaOriginal
-            ? `${new Date(fechaOriginal).getDate().toString().padStart(2, '0')}/${(new Date(fechaOriginal).getMonth() + 1).toString().padStart(2, '0')
-            }/${new Date(fechaOriginal).getFullYear()}`
+          const fechaFormateada = doc.fecha_doc
+            ? dayjs(doc.fecha_doc).format('DD/MM/YYYY')
             : '';
 
           return {
@@ -192,10 +190,40 @@ export class BuscarDocumentoComponent implements OnInit {
   }
 
   onSort(event: any) {
-  const sort = event.sorts[0];
-  this.ordenCampo = sort.prop;
-  this.ordenDireccion = sort.dir;
-  this.buscarDocumento(this.paginaActual);
+    const sort = event.sorts[0];
+    this.ordenCampo = sort.prop;
+    this.ordenDireccion = sort.dir;
+    this.buscarDocumento(this.paginaActual);
+  }
+
+  getPaginasParaMostrar(): (number | string)[] {
+  const total = this.total_paginas;
+  const actual = this.paginaActual;
+  const delta = 2;
+  const paginas: (number | string)[] = [];
+
+  const mostrarIzquierda = Math.max(2, actual - delta);
+  const mostrarDerecha = Math.min(total - 1, actual + delta);
+
+  paginas.push(1);
+
+  if (mostrarIzquierda > 2) {
+    paginas.push('...');
+  }
+
+  for (let i = mostrarIzquierda; i <= mostrarDerecha; i++) {
+    paginas.push(i);
+  }
+
+  if (mostrarDerecha < total - 1) {
+    paginas.push('...');
+  }
+
+  if (total > 1) {
+    paginas.push(total);
+  }
+
+  return paginas;
 }
 
 
