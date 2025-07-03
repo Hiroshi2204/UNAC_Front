@@ -8,36 +8,10 @@
   margin-bottom: 0;
 }
 
-.card.full-width-header {
-  background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e3e6f0;
-  animation: fadeInUp 0.5s ease-out;
-  transition: all 0.3s ease-in-out;
-  width: 90%;
-  margin: 0 auto; /* centra horizontalmente */
-}
-
-.card.full-width-header:hover {
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
-}
-
-.card-header {
-  border-bottom: 1px solid #e0e0e0;
-  background-color: #f7f9fc;
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
-}
-
-.card-header h4 {
-  margin-bottom: 0;
-  font-weight: 600;
-  color: #333;
-}
-
 .section-body {
   padding-top: 0 !important;
+  padding-right: 3%;
+  margin-left: 3%;
 }
 
 @keyframes fadeInDown {
@@ -60,30 +34,6 @@
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-::ng-deep ngx-datatable .datatable-body-cell,
-::ng-deep ngx-datatable .datatable-header-cell {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-::ng-deep ngx-datatable .datatable-body-cell span.truncate-cell {
-  display: inline-block;
-  max-width: 150px; /* Ajusta al gusto */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  vertical-align: middle;
-}
-::ng-deep ngx-datatable .datatable-body-cell span.truncate-pdf {
-  display: inline-block;
-  max-width: 350px; /* o el valor que desees */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  vertical-align: middle;
 }
 .pagination .btn.active {
   background-color: #007bff;

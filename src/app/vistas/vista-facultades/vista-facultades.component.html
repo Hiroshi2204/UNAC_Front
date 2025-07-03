@@ -20,246 +20,242 @@
 <div class="section-body ps-2">
   <div class="row">
     <div class="col-12">
-      <div class="card full-width-header">
-        <div class="card-header">
-          <h4>Buscar Documento</h4>
+      <h4>Buscar Documento</h4>
+      <div class="row align-items-end mb-3">
+        <div class="col-md-6">
+          <label for="oficina_remitente">Facultad</label>
+          <select
+            [(ngModel)]="filtros.oficina_remitente"
+            class="form-select form-control"
+          >
+            <option value="">Seleccione una opción</option>
+            <option *ngFor="let tipo of oficinas" [ngValue]="tipo.id">
+              {{ tipo.nombre }}
+            </option>
+          </select>
         </div>
-        <div class="card-body">
-          <div class="row align-items-end mb-3">
-            <div class="col-md-6">
-              <label for="oficina_remitente">Facultad</label>
-              <select
-                [(ngModel)]="filtros.oficina_remitente"
-                class="form-select form-control"
-              >
-                <option value="">Seleccione una opción</option>
-                <option *ngFor="let tipo of oficinas" [ngValue]="tipo.id">
-                  {{ tipo.nombre }}
-                </option>
-              </select>
-            </div>
 
-            <div class="col-md-2">
-              <label for="num_documento">Nro documento</label>
-              <input
-                [(ngModel)]="filtros.num_documento"
-                name="num_documento"
-                type="text"
-                class="form-control"
-                placeholder="Número"
-              />
-            </div>
+        <div class="col-md-2">
+          <label for="num_documento">Nro documento</label>
+          <input
+            [(ngModel)]="filtros.num_documento"
+            name="num_documento"
+            type="text"
+            class="form-control"
+            placeholder="Número"
+          />
+        </div>
 
-            <div class="col-md-4">
-              <label for="nombre">Nombre del documento</label>
-              <input
-                [(ngModel)]="filtros.nombre"
-                name="nombre"
-                type="text"
-                class="form-control"
-                placeholder="Nombre del documento"
-              />
-            </div>
-          </div>
+        <div class="col-md-4">
+          <label for="nombre">Nombre del documento</label>
+          <input
+            [(ngModel)]="filtros.nombre"
+            name="nombre"
+            type="text"
+            class="form-control"
+            placeholder="Nombre del documento"
+          />
+        </div>
+      </div>
 
-          <div class="row align-items-end mb-3">
-            <div class="col-md-2">
-              <label for="fecha_inicio">Fecha desde</label>
-              <input
-                [(ngModel)]="filtros.fecha_inicio"
-                name="fecha_inicio"
-                type="date"
-                class="form-control"
-              />
-            </div>
+      <div class="row align-items-end mb-3">
+        <div class="col-md-2">
+          <label for="fecha_inicio">Fecha desde</label>
+          <input
+            [(ngModel)]="filtros.fecha_inicio"
+            name="fecha_inicio"
+            type="date"
+            class="form-control"
+          />
+        </div>
 
-            <div class="col-md-2">
-              <label for="fecha_fin">Fecha hasta</label>
-              <input
-                [(ngModel)]="filtros.fecha_fin"
-                name="fecha_fin"
-                type="date"
-                class="form-control"
-              />
-            </div>
+        <div class="col-md-2">
+          <label for="fecha_fin">Fecha hasta</label>
+          <input
+            [(ngModel)]="filtros.fecha_fin"
+            name="fecha_fin"
+            type="date"
+            class="form-control"
+          />
+        </div>
 
-            <div class="col-md-3">
-              <label for="asunto">Resumen</label>
-              <input
-                [(ngModel)]="filtros.resumen"
-                name="resumen"
-                type="text"
-                class="form-control"
-                placeholder="Resumen"
-              />
-            </div>
+        <div class="col-md-3">
+          <label for="asunto">Resumen</label>
+          <input
+            [(ngModel)]="filtros.resumen"
+            name="resumen"
+            type="text"
+            class="form-control"
+            placeholder="Resumen"
+          />
+        </div>
 
-            <div class="col-md-5">
-              <label for="detalle">Detalle</label>
-              <input
-                [(ngModel)]="filtros.detalle"
-                name="detalle"
-                type="text"
-                class="form-control"
-                placeholder="Detalle"
-              />
-            </div>
+        <div class="col-md-5">
+          <label for="detalle">Detalle</label>
+          <input
+            [(ngModel)]="filtros.detalle"
+            name="detalle"
+            type="text"
+            class="form-control"
+            placeholder="Detalle"
+          />
+        </div>
 
-            <div class="col-md-2 mt-3">
-              <button class="btn btn-primary" (click)="buscarDocumento(1)">
-                Buscar <i class="bi bi-search ms-2"></i>
-              </button>
-            </div>
-          </div>
+        <div class="col-md-2 mt-3">
+          <button class="btn btn-primary" (click)="buscarDocumento(1)">
+            Buscar <i class="bi bi-search ms-2"></i>
+          </button>
+        </div>
+      </div>
 
-          <!-- Tabla general antes de hacer búsqueda -->
-          <div
-            *ngIf="mostrarTablaGeneral && documentosFacultades.length > 0"
-            class="mt-4"
+      <!-- Tabla general antes de hacer búsqueda -->
+      <div
+        *ngIf="mostrarTablaGeneral && documentosFacultades.length > 0"
+        class="mt-4"
+      >
+        <h5 class="mb-3">Documentos por Facultad</h5>
+
+        <ngx-datatable
+          class="bootstrap"
+          [rows]="documentosFacultades"
+          [columnMode]="'force'"
+          [headerHeight]="50"
+          [footerHeight]="50"
+          [rowHeight]="'auto'"
+          [scrollbarH]="scrollBarHorizontal"
+        >
+          <ngx-datatable-column name="Nombre" [width]="250">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <span class="truncate-cell" [title]="row.nombre">
+                {{ row.nombre }}
+              </span>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="Número">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              {{ row.num_anio }}
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="Facultad" [width]="200">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <span class="truncate-cell" [title]="row.oficina_remitente">
+                {{ row.oficina_remitente }}
+              </span>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="Fecha">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              {{ row.fecha_doc }}
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="Archivo PDF" [width]="350">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <span class="truncate-pdf" [title]="row.nombre_original_pdf">
+                {{ row.nombre_original_pdf || "No disponible" }}
+              </span>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column
+            name="Acciones"
+            [sortable]="false"
+            [canAutoResize]="false"
+            [width]="150"
+            [headerClass]="'text-center'"
           >
-            <h5 class="mb-3">Documentos por Facultad</h5>
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <div class="d-flex justify-content-center align-items-center">
+                <button
+                  class="btn btn-sm btn-primary me-1"
+                  (click)="descargarDoc(row.id, row.nombre_original_pdf)"
+                >
+                  <i class="fa fa-download"></i>
+                </button>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+      </div>
 
-            <ngx-datatable
-              class="bootstrap"
-              [rows]="documentosFacultades"
-              [columnMode]="'force'"
-              [headerHeight]="50"
-              [footerHeight]="50"
-              [rowHeight]="'auto'"
-              [scrollbarH]="scrollBarHorizontal"
-            >
-              <ngx-datatable-column name="Nombre" [width]="250">
-                <ng-template let-row="row" ngx-datatable-cell-template>
-                  <span class="truncate-cell" [title]="row.nombre">
-                    {{ row.nombre }}
-                  </span>
-                </ng-template>
-              </ngx-datatable-column>
+      <div
+        *ngIf="loadingIndicator"
+        class="d-flex justify-content-center align-items-center"
+        style="height: 200px"
+      >
+        <div
+          class="spinner-border text-primary"
+          role="status"
+          style="width: 3rem; height: 3rem"
+        >
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      </div>
 
-              <ngx-datatable-column name="Número">
-                <ng-template let-row="row" ngx-datatable-cell-template>
-                  {{ row.num_anio }}
-                </ng-template>
-              </ngx-datatable-column>
+      <div *ngIf="!loadingIndicator && dataLoaded">
+        <div *ngIf="rows.length > 0; else noDataTemplate">
+          <!-- Aquí va la tabla ngx-datatable y paginación -->
+        </div>
+      </div>
 
-              <ngx-datatable-column name="Facultad" [width]="200">
-                <ng-template let-row="row" ngx-datatable-cell-template>
-                  <span class="truncate-cell" [title]="row.oficina_remitente">
-                    {{ row.oficina_remitente }}
-                  </span>
-                </ng-template>
-              </ngx-datatable-column>
-
-              <ngx-datatable-column name="Fecha">
-                <ng-template let-row="row" ngx-datatable-cell-template>
-                  {{ row.fecha_doc }}
-                </ng-template>
-              </ngx-datatable-column>
-
-              <ngx-datatable-column name="Archivo PDF" [width]="350">
-                <ng-template let-row="row" ngx-datatable-cell-template>
-                  <span class="truncate-pdf" [title]="row.nombre_original_pdf">
-                    {{ row.nombre_original_pdf || "No disponible" }}
-                  </span>
-                </ng-template>
-              </ngx-datatable-column>
-
-              <ngx-datatable-column
-                name="Acciones"
-                [sortable]="false"
-                [canAutoResize]="false"
-                [width]="150"
-                [headerClass]="'text-center'"
-              >
-                <ng-template let-row="row" ngx-datatable-cell-template>
-                  <div class="d-flex justify-content-center align-items-center">
-                    <button
-                      class="btn btn-sm btn-primary me-1"
-                      (click)="descargarDoc(row.id, row.nombre_original_pdf)"
-                    >
-                      <i class="fa fa-download"></i>
-                    </button>
-                  </div>
-                </ng-template>
-              </ngx-datatable-column>
-            </ngx-datatable>
-          </div>
-
-          <div
-            *ngIf="loadingIndicator"
-            class="d-flex justify-content-center align-items-center"
-            style="height: 200px"
+      <div *ngIf="dataLoaded; else initialMessage">
+        <div *ngIf="rows.length > 0; else noDataTemplate">
+          <ngx-datatable
+            #table
+            class="bootstrap"
+            [rows]="rows"
+            [columns]="[]"
+            [columnMode]="'standard'"
+            [headerHeight]="50"
+            [footerHeight]="50"
+            [rowHeight]="'auto'"
+            [scrollbarH]="scrollBarHorizontal"
+            [count]="totalItems"
+            [limit]="itemsPorPagina"
+            [offset]="paginaActual - 1"
+            (page)="onPageChange($event)"
+            (sort)="onSort($event)"
           >
-            <div
-              class="spinner-border text-primary"
-              role="status"
-              style="width: 3rem; height: 3rem"
-            >
-              <span class="visually-hidden">Cargando...</span>
-            </div>
-          </div>
+            <ngx-datatable-column name="Nombre" [width]="250">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <span class="truncate-cell" [title]="row.nombre">
+                  {{ row.nombre }}
+                </span>
+              </ng-template>
+            </ngx-datatable-column>
 
-          <div *ngIf="!loadingIndicator && dataLoaded">
-            <div *ngIf="rows.length > 0; else noDataTemplate">
-              <!-- Aquí va la tabla ngx-datatable y paginación -->
-            </div>
-          </div>
+            <ngx-datatable-column name="Número" [sortable]="true">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                {{ row.num_anio }}
+              </ng-template>
+            </ngx-datatable-column>
 
-          <div *ngIf="dataLoaded; else initialMessage">
-            <div *ngIf="rows.length > 0; else noDataTemplate">
-              <ngx-datatable
-                #table
-                class="bootstrap"
-                [rows]="rows"
-                [columns]="[]"
-                [columnMode]="'standard'"
-                [headerHeight]="50"
-                [footerHeight]="50"
-                [rowHeight]="'auto'"
-                [scrollbarH]="scrollBarHorizontal"
-                [count]="totalItems"
-                [limit]="itemsPorPagina"
-                [offset]="paginaActual - 1"
-                (page)="onPageChange($event)"
-                (sort)="onSort($event)"
-              >
-                <ngx-datatable-column name="Nombre" [width]="250">
-                  <ng-template let-row="row" ngx-datatable-cell-template>
-                    <span class="truncate-cell" [title]="row.nombre">
-                      {{ row.nombre }}
-                    </span>
-                  </ng-template>
-                </ngx-datatable-column>
+            <ngx-datatable-column name="Facultad" [width]="200">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <span class="truncate-cell" [title]="row.oficina_remitente">
+                  {{ row.oficina_remitente }}
+                </span>
+              </ng-template>
+            </ngx-datatable-column>
 
-                <ngx-datatable-column name="Número" [sortable]="true">
-                  <ng-template let-row="row" ngx-datatable-cell-template>
-                    {{ row.num_anio }}
-                  </ng-template>
-                </ngx-datatable-column>
+            <ngx-datatable-column name="Resumen">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <span class="truncate-cell" [title]="row.resumen">
+                  {{ row.resumen }}
+                </span>
+              </ng-template>
+            </ngx-datatable-column>
 
-                <ngx-datatable-column name="Facultad" [width]="200">
-                  <ng-template let-row="row" ngx-datatable-cell-template>
-                    <span class="truncate-cell" [title]="row.oficina_remitente">
-                      {{ row.oficina_remitente }}
-                    </span>
-                  </ng-template>
-                </ngx-datatable-column>
+            <ngx-datatable-column name="Fecha" [sortable]="true">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                {{ row.fecha_doc }}
+              </ng-template>
+            </ngx-datatable-column>
 
-                <ngx-datatable-column name="Resumen">
-                  <ng-template let-row="row" ngx-datatable-cell-template>
-                    <span class="truncate-cell" [title]="row.resumen">
-                      {{ row.resumen }}
-                    </span>
-                  </ng-template>
-                </ngx-datatable-column>
-
-                <ngx-datatable-column name="Fecha" [sortable]="true">
-                  <ng-template let-row="row" ngx-datatable-cell-template>
-                    {{ row.fecha_doc }}
-                  </ng-template>
-                </ngx-datatable-column>
-
-                <ngx-datatable-column name="Archivo PDF" [width]="350">
+            <!-- <ngx-datatable-column name="Archivo PDF" [width]="350">
                   <ng-template let-row="row" ngx-datatable-cell-template>
                     <span
                       class="truncate-pdf"
@@ -268,91 +264,85 @@
                       {{ row.nombre_original_pdf || "No disponible" }}
                     </span>
                   </ng-template>
-                </ngx-datatable-column>
+                </ngx-datatable-column> -->
 
-                <ngx-datatable-column
-                  name="Acciones"
-                  [sortable]="false"
-                  [canAutoResize]="false"
-                  [width]="150"
-                  [headerClass]="'text-center'"
+            <ngx-datatable-column
+              name="Acciones"
+              [sortable]="false"
+              [canAutoResize]="false"
+              [width]="150"
+              [headerClass]="'text-center'"
+            >
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <div class="d-flex justify-content-center align-items-center">
+                  <button
+                    class="btn btn-sm btn-primary me-1"
+                    (click)="descargarDoc(row.id, row.nombre_original_pdf)"
+                  >
+                    <i class="fa fa-download"></i>
+                  </button>
+                </div>
+              </ng-template>
+            </ngx-datatable-column>
+          </ngx-datatable>
+
+          <nav *ngIf="total_paginas > 1" aria-label="Page navigation">
+            <ul class="pagination justify-content-center mt-3">
+              <!-- Botón anterior -->
+              <li class="page-item" [class.disabled]="paginaActual === 1">
+                <button
+                  class="page-link"
+                  (click)="
+                    paginaActual > 1 && buscarDocumento(paginaActual - 1)
+                  "
                 >
-                  <ng-template let-row="row" ngx-datatable-cell-template>
-                    <div
-                      class="d-flex justify-content-center align-items-center"
-                    >
-                      <button
-                        class="btn btn-sm btn-primary me-1"
-                        (click)="descargarDoc(row.id, row.nombre_original_pdf)"
-                      >
-                        <i class="fa fa-download"></i>
-                      </button>
-                    </div>
-                  </ng-template>
-                </ngx-datatable-column>
-              </ngx-datatable>
+                  &laquo;
+                </button>
+              </li>
 
-              <nav *ngIf="total_paginas > 1" aria-label="Page navigation">
-                  <ul class="pagination justify-content-center mt-3">
-                    <!-- Botón anterior -->
-                    <li class="page-item" [class.disabled]="paginaActual === 1">
-                      <button
-                        class="page-link"
-                        (click)="
-                          paginaActual > 1 && buscarDocumento(paginaActual - 1)
-                        "
-                      >
-                        &laquo;
-                      </button>
-                    </li>
+              <!-- Generar páginas con puntos suspensivos -->
+              <li
+                *ngFor="let page of getPaginasParaMostrar()"
+                class="page-item"
+                [class.active]="page === paginaActual"
+                [class.disabled]="page === '...'"
+              >
+                <button
+                  class="page-link"
+                  [disabled]="page === '...'"
+                  (click)="page !== '...' && buscarDocumento(+page)"
+                >
+                  {{ page }}
+                </button>
+              </li>
 
-                    <!-- Generar páginas con puntos suspensivos -->
-                    <li
-                      *ngFor="let page of getPaginasParaMostrar()"
-                      class="page-item"
-                      [class.active]="page === paginaActual"
-                      [class.disabled]="page === '...'"
-                    >
-                      <button
-                        class="page-link"
-                        [disabled]="page === '...'"
-                        (click)="page !== '...' && buscarDocumento(+page)"
-                      >
-                        {{ page }}
-                      </button>
-                    </li>
-
-                    <!-- Botón siguiente -->
-                    <li
-                      class="page-item"
-                      [class.disabled]="paginaActual === total_paginas"
-                    >
-                      <button
-                        class="page-link"
-                        (click)="
-                          paginaActual < total_paginas &&
-                            buscarDocumento(paginaActual + 1)
-                        "
-                      >
-                        &raquo;
-                      </button>
-                    </li>
-                  </ul>
-                </nav>
-            </div>
-          </div>
-
-          <ng-template #initialMessage>
-            <p>
-              Por favor ingrese un término de búsqueda y haga clic en Buscar.
-            </p>
-          </ng-template>
-
-          <ng-template #noDataTemplate>
-            <p>No se encontraron coincidencias.</p>
-          </ng-template>
+              <!-- Botón siguiente -->
+              <li
+                class="page-item"
+                [class.disabled]="paginaActual === total_paginas"
+              >
+                <button
+                  class="page-link"
+                  (click)="
+                    paginaActual < total_paginas &&
+                      buscarDocumento(paginaActual + 1)
+                  "
+                >
+                  &raquo;
+                </button>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
+
+      <ng-template #initialMessage>
+        <p>Por favor ingrese un término de búsqueda y haga clic en Buscar.</p>
+      </ng-template>
+
+      <ng-template #noDataTemplate>
+        <p>No se encontraron coincidencias.</p>
+      </ng-template>
     </div>
   </div>
 </div>
