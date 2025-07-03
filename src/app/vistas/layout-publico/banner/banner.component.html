@@ -1,0 +1,15 @@
+<section
+  class="hero"
+  [ngStyle]="{
+    '--hero-h': height,
+    '--hero-bg': 'url(' + image + ')'
+  }"
+  appBannerObserver   <!-- ← nuestra directiva IntersectionObserver -->
+>
+  <div class="hero__content">
+    <h1 class="hero__title">{{ title }}</h1>
+
+    <!-- Breadcrumb opcional -->
+    <ng-content select="[breadcrumb]"></ng-content>
+  </div>
+</section>

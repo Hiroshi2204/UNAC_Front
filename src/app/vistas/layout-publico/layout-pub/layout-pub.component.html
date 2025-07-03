@@ -1,1 +1,10 @@
-<p>layout-pub works!</p>
+<!-- 1. Topbar: aparece mientras el banner sea visible -->
+<app-top-bar *ngIf="topbarVisible$ | async"></app-top-bar>
+
+<!-- 2. Navbar: siempre “sticky” -->
+<app-header-publico></app-header-publico>
+
+<!-- 3. Contenido de cada página -->
+<main class="pt-[calc(var(--topbar-h)+var(--navbar-h))]">
+  <router-outlet></router-outlet>
+</main>

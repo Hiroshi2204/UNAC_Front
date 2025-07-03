@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-banner',
@@ -7,5 +8,13 @@ import { Component } from '@angular/core';
   styleUrl: './banner.component.scss'
 })
 export class BannerComponent {
+
+   @Input({ required: true }) title!: string;
+
+  /** Ruta de la imagen de fondo */
+  @Input() image = '/assets/img/hero-default.jpg';
+
+  /** Altura opcional, por si una página la necesita más baja/alta */
+  @Input() height = '220px';
 
 }
