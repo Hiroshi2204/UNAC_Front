@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { TopbarService } from '../topbar.service';
 import { CommonModule } from '@angular/common';
 import { TopBarComponent } from '../top-bar/top-bar.component';
-import { HeaderComponent } from 'app/layout/header/header.component';
+import { HeaderPublicoComponent } from '../header-publico/header-publico.component';
 import { RouterOutlet } from '@angular/router';
 
 
@@ -12,7 +12,8 @@ import { RouterOutlet } from '@angular/router';
     CommonModule,
     RouterOutlet,
     TopBarComponent,
-    HeaderComponent,
+    HeaderPublicoComponent
+    
   ],
   templateUrl: './layout-pub.component.html',
   styleUrl: './layout-pub.component.scss'

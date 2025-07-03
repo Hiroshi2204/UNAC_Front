@@ -1,38 +1,49 @@
-<!-- Bloque azul fijo con datos de contacto -->
-<header class="topbar">
-  <div class="container">
-    <!-- Izquierda ------------------------------------------------------- -->
-    <nav class="contact">
+<nav class="topbar navbar navbar-expand bg-primary text-white small py-1">
+  <div class="container-fluid justify-content-between">
+    <!-- Lado izquierdo -->
+    <div class="d-flex gap-3 align-items-center">
+      <!-- Correo -->
       <a
-        class="contact__item"
+        class="text-white d-flex align-items-center gap-1 text-decoration-none"
         href="mailto:ocii.informes@unac.pe"
-        aria-label="Enviar correo a Oficina de Informes"
       >
-        <i class="fa-solid fa-envelope"></i>
-         <span class="contact__label">ocii.informes&#64;unac.pe</span>
+        <i class="bi bi-envelope-fill"></i>
+        <span>ocii.informespe</span>
       </a>
 
-      <a class="contact__item" href="tel:+514296609" aria-label="Llamar a la universidad">
-        <i class="fa-solid fa-phone"></i>
-        <span class="contact__label">429-6609 / 429-9899</span>
-      </a>
-    </nav>
-
-    <!-- Derecha --------------------------------------------------------- -->
-    <div class="links">
-      <a routerLink="/admision" class="links__item">ADMISIÓN</a>
-
+      <!-- Teléfono -->
       <a
-        href="https://www.gob.pe/institucion/unac/transparencia" target="_blank" rel="noopener"
-        aria-label="Portal de Transparencia"
+        class="text-white d-flex align-items-center gap-1 text-decoration-none"
+        href="tel:+514296609"
+      >
+        <i class="bi bi-telephone-fill"></i>
+        <span>429-6609 / 429-9899</span>
+      </a>
+    </div>
+
+    <!-- Lado derecho -->
+    <div class="d-flex align-items-center gap-3">
+      <!-- Enlace a Admisión -->
+      <a
+        routerLink="/admision"
+        class="text-white text-decoration-none fw-semibold"
+      >
+        ADMISIÓN
+      </a>
+
+      <!-- Sello “Portal de Transparencia Estándar” -->
+      <a
+        href="https://www.gob.pe/institucion/unacpe"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="d-inline-block"
       >
         <img
-          src="/assets/img/transparencia-badge.png"
-          width="90"
-          height="28"
-          alt="Portal de Transparencia"
+          src="assets/images/vistas_publico/pte.png"
+          alt="Portal de Transparencia Estándar"
+          height="32"
         />
       </a>
     </div>
   </div>
-</header>
+</nav>

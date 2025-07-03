@@ -12,18 +12,11 @@ import { TopbarService } from '../topbar.service';
 })
 export class HeaderPublicoComponent {
 
-  mobileOpen = signal(false);
-
-  /** desplazamiento dinámico: 34 px si topbar visible, 0 px si no */
-  @HostBinding('style.--navbar-offset')
-  offset = computed(() =>
-    this.topbar.visibleSignal() ? '34px' : '0px'
-  );
+ 
 
   constructor(private topbar: TopbarService) {}
 
-  toggleMobile(): void {
-    this.mobileOpen.update(o => !o);
-  }
+ 
+  
 
 }

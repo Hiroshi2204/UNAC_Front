@@ -1,66 +1,12 @@
-/* Variables reutilizables (o muévelas a styles.scss) */
-:root {
-  --topbar-h: 34px;
-  --topbar-bg: #0b60af; /* azul corporativo UNAC */
-}
-
-/* ---------- Componente :host() --------------------------------------- */
 :host {
-  position: fixed;
-  top: 0;
-  inset-inline: 0;
-  z-index: 50;
-
-  height: var(--topbar-h);
-  background-color: var(--topbar-bg);
-  color: #fff;
-  font-size: 0.8125rem;
+  display: block;
+  position: static !important;   /* nada de fixed/sticky */
+  width: 100%;
+  margin: 0;                     /* sin márgenes externos */
 }
 
-/* ---------- Maquetación interna ------------------------------------- */
-.container {
-  max-width: 1280px;
-  margin-inline: auto;
-  height: 100%;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-inline: 1rem;
-}
-
-.contact,
-.links {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-/* ---------- Enlaces de contacto ------------------------------------- */
-.contact__item,
-.links__item {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  color: inherit;
-  text-decoration: none;
-  transition: opacity 0.2s ease;
-
-  &:hover {
-    opacity: 0.7;
-  }
-}
-
-.contact__label {
-  /* Oculta texto en pantallas muy estrechas */
-  @media (max-width: 480px) {
-    display: none;
-  }
-}
-
-/* ---------- Ajustes responsivos ------------------------------------- */
-@media (max-width: 768px) {
-  .links__item {
-    font-size: 0.75rem;
-  }
+.topbar {
+  background: #2072ba;
+  padding-left: 0 !important;    /* ✅ quita cualquier sangría */
+  padding-right: 0 !important;
 }
