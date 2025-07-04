@@ -1,0 +1,19 @@
+.navbar {
+  position: static !important;   /* vuelve al flujo normal */
+  left: 0 !important;            /* anula posibles desplazamientos */
+  padding-left: 0 !important;
+  background-color: #fff;    /* sin hueco de sidebar */
+}
+
+/* --- CONTENIDO --- */
+body {
+  padding-left: 0 !important;    /* quita el margen fantasma */
+  /* si decides dejar la barra fixed-top, añade el alto: */
+  /* padding-top: 56px;           ← altura del navbar (ajústalo) */
+}
+
+.logo-unac {
+  /* 40 px en móviles, hasta 80 px en pantallas grandes */
+  height: clamp(35px, 6vw, 60px);
+  width: auto;        /* mantiene proporción */
+}

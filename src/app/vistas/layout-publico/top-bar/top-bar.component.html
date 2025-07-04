@@ -1,49 +1,37 @@
-<nav class="topbar navbar navbar-expand bg-primary text-white small py-1">
-  <div class="container-fluid justify-content-between">
-    <!-- Lado izquierdo -->
-    <div class="d-flex gap-3 align-items-center">
-      <!-- Correo -->
-      <a
-        class="text-white d-flex align-items-center gap-1 text-decoration-none"
-        href="mailto:ocii.informes@unac.pe"
-      >
-        <i class="bi bi-envelope-fill"></i>
-        <span>ocii.informespe</span>
-      </a>
+<nav class="navbar navbar-dark topbar py-1">
+  <!-- cambia container-fluid → container -->
+  <div class="container d-flex justify-content-between align-items-center">
 
-      <!-- Teléfono -->
-      <a
-        class="text-white d-flex align-items-center gap-1 text-decoration-none"
-        href="tel:+514296609"
-      >
-        <i class="bi bi-telephone-fill"></i>
-        <span>429-6609 / 429-9899</span>
-      </a>
+    <!-- Izquierda -->
+    <div class="d-flex align-items-center gap-4">
+      <span class="d-flex align-items-center text-white small">
+        <i class="bi bi-envelope me-2"></i>
+        ocii.informes&#79;unac.pe
+      </span>
+
+      <span class="d-flex align-items-center text-white small">
+        <i class="bi bi-telephone me-2"></i>
+        429-6609 / 429-9899
+      </span>
     </div>
 
-    <!-- Lado derecho -->
+    <!-- Derecha -->
     <div class="d-flex align-items-center gap-3">
-      <!-- Enlace a Admisión -->
-      <a
-        routerLink="/admision"
-        class="text-white text-decoration-none fw-semibold"
-      >
-        ADMISIÓN
+      <a href="http://admision.unac.edu.pe/"
+         class="text-white text-decoration-none" target="_blank" rel="noopener">
+        ADMISION
       </a>
 
-      <!-- Sello “Portal de Transparencia Estándar” -->
-      <a
-        href="https://www.gob.pe/institucion/unacpe"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="d-inline-block"
-      >
-        <img
-          src="assets/images/vistas_publico/pte.png"
-          alt="Portal de Transparencia Estándar"
-          height="32"
-        />
+      <a href="https://www.transparencia.gob.pe/enlaces/pte_transparencia_enlaces.aspx?id_entidad=10404"
+         target="_blank" rel="noopener">
+        <img src="assets/images/vistas-publico/pte.png"
+             alt="Portal de Transparencia Estándar"
+             height="40">
       </a>
     </div>
+
+
+    
+
   </div>
 </nav>

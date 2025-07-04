@@ -1,0 +1,41 @@
+<nav class="navbar navbar-dark topbar py-1">
+  <div class="container d-flex justify-content-between align-items-center flex-wrap">
+
+    <!-- IZQUIERDA -->
+    <div class="d-flex align-items-center gap-3 flex-wrap">
+
+      <!-- Correo: siempre visible -->
+      <span class="d-flex align-items-center text-white small">
+        <i class="bi bi-envelope me-2"></i>
+        ocii.informes&#79;unac.pe
+      </span>
+
+      <!-- Teléfono: oculto < md (d-none d-md-flex) -->
+      <span class="d-none d-md-flex align-items-center text-white small">
+        <i class="bi bi-telephone me-2"></i>
+        429-6609 / 429-9899
+      </span>
+
+    </div>
+
+    <!-- DERECHA -->
+    <div class="d-flex align-items-center gap-3">
+
+      <!-- ADMISION: oculto < md -->
+      <a routerLink="/admision"
+         class="d-none d-md-inline text-white text-decoration-none fw-semibold small">
+        ADMISION
+      </a>
+
+      <!-- Logo PTE: siempre visible -->
+      <a href="https://www.unac.pe/transparencia"
+         target="_blank" rel="noopener">
+        <img src="assets/images/vistas-publico/pte.png"
+             alt="Portal de Transparencia Estándar"
+             height="36">
+             class="pte-logo">
+      </a>
+    </div>
+
+  </div>
+</nav>

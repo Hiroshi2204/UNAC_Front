@@ -4,7 +4,8 @@ import { CommonModule } from '@angular/common';
 import { TopBarComponent } from '../top-bar/top-bar.component';
 import { HeaderPublicoComponent } from '../header-publico/header-publico.component';
 import { RouterOutlet } from '@angular/router';
-
+/* import { SidebarPublicoComponent } from '../sidebar-publico/sidebar-publico.component'; */
+import { BannerComponent } from '../banner/banner.component';
 
 @Component({
   selector: 'app-layout-pub',
@@ -12,7 +13,10 @@ import { RouterOutlet } from '@angular/router';
     CommonModule,
     RouterOutlet,
     TopBarComponent,
-    HeaderPublicoComponent
+    HeaderPublicoComponent,
+    BannerComponent,
+    
+   
     
   ],
   templateUrl: './layout-pub.component.html',

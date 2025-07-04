@@ -1,13 +1,30 @@
-<!-- 1. Topbar: aparece mientras el banner sea visible -->
+<div class="public-vista">
+
+  <!-- 1. Topbar: aparece mientras el banner sea visible -->
 <app-top-bar></app-top-bar>
 
 <!-- 2. Navbar: siempre “sticky” -->
 <app-header-publico></app-header-publico>
 
+<app-banner
+  titulo="Normas"
+  [breadcrumbs]="[
+    { label: 'Transparencia', url: '/transparencia' },
+    { label: 'Normas', url: '/normas' }
+  ]">
+</app-banner>
 
-<!-- 3. Contenido de cada página -->
-<div>
+<div class="layout d-flex">
+  <!-- Columna lateral -->
+  <!-- <app-sidebar-publico class="aside-static flex-shrink-0"></app-sidebar-publico> -->
 
-  <router-outlet></router-outlet>
+  <!-- Zona de páginas -->
+  <main class="content flex-grow-1 px-4 py-3">
+    <router-outlet></router-outlet>
+  </main>
 </div>
   
+
+
+</div>
+

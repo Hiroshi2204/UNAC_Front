@@ -1,338 +1,205 @@
+<section class="container-fluid my-4">
 
-<div class="container px-4 mt-3">
-  <div class="d-flex justify-content-between align-items-center mb-2">
-    <div class="titulo-moderno text-end">
+  <!-- Fila 1 de filtros centrada -->
+  <div class="row gy-3 gx-4 justify-content-center">
+    <div class="col-md-3 form-group">
+      <label class="form-label" for="facultad1">Facultad</label>
+      <select id="facultad1" [(ngModel)]="filtros.oficina_remitente" class="form-select">
+        <option value="">Seleccione una opción</option>
+        <option *ngFor="let tipo of oficinas" [ngValue]="tipo.id">{{ tipo.nombre }}</option>
+      </select>
+    </div>
+    <div class="col-md-3 form-group">
+      <label class="form-label" for="facultad2">Facultad</label>
+      <select id="facultad2" [(ngModel)]="filtros.oficina_remitente" class="form-select">
+        <option value="">Seleccione una opción</option>
+        <option *ngFor="let tipo of oficinas" [ngValue]="tipo.id">{{ tipo.nombre }}</option>
+      </select>
+    </div>
+    <div class="col-md-2 form-group">
+      <label class="form-label" for="nroDoc">Nro documento</label>
+      <input id="nroDoc" [(ngModel)]="filtros.num_documento" class="form-control" placeholder="Número">
+    </div>
+    <div class="col-md-2 form-group">
+      <label class="form-label" for="nombreDoc">Nombre documento</label>
+      <input id="nombreDoc" [(ngModel)]="filtros.nombre" class="form-control" placeholder="Nombre">
+    </div>
+  </div>
+
+  <!-- Fila 2 de filtros centrada -->
+  <div class="row gy-3 gx-4 mt-3 justify-content-center">
+    <div class="col-md-2 form-group">
+      <label class="form-label" for="fechaIni">Fecha desde</label>
+      <input id="fechaIni" type="date" [(ngModel)]="filtros.fecha_inicio" class="form-control">
+    </div>
+    <div class="col-md-2 form-group">
+      <label class="form-label" for="fechaFin">Fecha hasta</label>
+      <input id="fechaFin" type="date" [(ngModel)]="filtros.fecha_fin" class="form-control">
+    </div>
+    <div class="col-md-3 form-group">
+      <label class="form-label" for="resumen">Resumen</label>
+      <input id="resumen" [(ngModel)]="filtros.resumen" class="form-control" placeholder="Resumen">
+    </div>
+    <div class="col-md-3 form-group">
+      <label class="form-label" for="detalle">Detalle</label>
+      <input id="detalle" [(ngModel)]="filtros.detalle" class="form-control" placeholder="Detalle">
+    </div>
+  </div>
+
+  <!-- Botón Buscar centrado -->
+  <div class="row justify-content-center mt-4">
+    <div class="col-md-2 form-group d-flex align-items-end">
+      <button type="button" class="btn btn-success w-100" (click)="buscarDocumento(1)">
+        <i class="bi bi-search me-2"></i> Buscar
+      </button>
+    </div>
+  </div>
+
+  <!-- Primera tabla: Documentos por Facultad -->
+  <div *ngIf="mostrarTablaGeneral && documentosFacultades.length" class="mt-5">
+    <h5>Documentos por Facultad</h5>
+    <ngx-datatable
+      class="bootstrap"
+      [rows]="documentosFacultades"
+      columnMode="force"
+      [headerHeight]="50"
+      [footerHeight]="50"
+      [rowHeight]="'auto'"
+      [scrollbarH]="scrollBarHorizontal">
       
-    </div>
-    
-  </div>
-</div>
-<div class="section-body ps-2">
-  <div class="row">
-    <div class="col-12">
-      <h4>Buscar Documento</h4>
-      <div class="row align-items-end mb-3">
-        <div class="col-md-6">
-          <label for="oficina_remitente">Facultad</label>
-          <select
-            [(ngModel)]="filtros.oficina_remitente"
-            class="form-select form-control"
-          >
-            <option value="">Seleccione una opción</option>
-            <option *ngFor="let tipo of oficinas" [ngValue]="tipo.id">
-              {{ tipo.nombre }}
-            </option>
-          </select>
-        </div>
+      <ngx-datatable-column name="Nombre" [flexGrow]="3" [minWidth]="150">
+        <ng-template ngx-datatable-cell-template let-row="row">
+          <span class="truncate-cell" [title]="row.nombre">{{ row.nombre }}</span>
+        </ng-template>
+      </ngx-datatable-column>
 
-        <div class="col-md-2">
-          <label for="num_documento">Nro documento</label>
-          <input
-            [(ngModel)]="filtros.num_documento"
-            name="num_documento"
-            type="text"
-            class="form-control"
-            placeholder="Número"
-          />
-        </div>
+      <ngx-datatable-column name="Número" [flexGrow]="1" [minWidth]="80">
+        <ng-template ngx-datatable-cell-template let-row="row">
+          {{ row.num_anio }}
+        </ng-template>
+      </ngx-datatable-column>
 
-        <div class="col-md-4">
-          <label for="nombre">Nombre del documento</label>
-          <input
-            [(ngModel)]="filtros.nombre"
-            name="nombre"
-            type="text"
-            class="form-control"
-            placeholder="Nombre del documento"
-          />
-        </div>
-      </div>
+      <ngx-datatable-column name="Facultad" [flexGrow]="2" [minWidth]="120">
+        <ng-template ngx-datatable-cell-template let-row="row">
+          {{ row.oficina_remitente }}
+        </ng-template>
+      </ngx-datatable-column>
 
-      <div class="row align-items-end mb-3">
-        <div class="col-md-2">
-          <label for="fecha_inicio">Fecha desde</label>
-          <input
-            [(ngModel)]="filtros.fecha_inicio"
-            name="fecha_inicio"
-            type="date"
-            class="form-control"
-          />
-        </div>
+      <ngx-datatable-column
+        name="Fecha"
+        [flexGrow]="0"
+        [minWidth]="70"
+        [headerClass]="'text-center'"
+        [cellClass]="'text-center'">
+        <ng-template ngx-datatable-cell-template let-row="row">
+          {{ row.fecha_doc }}
+        </ng-template>
+      </ngx-datatable-column>
 
-        <div class="col-md-2">
-          <label for="fecha_fin">Fecha hasta</label>
-          <input
-            [(ngModel)]="filtros.fecha_fin"
-            name="fecha_fin"
-            type="date"
-            class="form-control"
-          />
-        </div>
-
-        <div class="col-md-3">
-          <label for="asunto">Resumen</label>
-          <input
-            [(ngModel)]="filtros.resumen"
-            name="resumen"
-            type="text"
-            class="form-control"
-            placeholder="Resumen"
-          />
-        </div>
-
-        <div class="col-md-5">
-          <label for="detalle">Detalle</label>
-          <input
-            [(ngModel)]="filtros.detalle"
-            name="detalle"
-            type="text"
-            class="form-control"
-            placeholder="Detalle"
-          />
-        </div>
-
-        <div class="col-md-2 mt-3">
-          <button class="btn btn-primary" (click)="buscarDocumento(1)">
-            Buscar <i class="bi bi-search ms-2"></i>
+      <ngx-datatable-column
+        name="Acciones"
+        [sortable]="false"
+        [flexGrow]="0"
+        [width]="50"
+        [headerClass]="'text-center'"
+        [cellClass]="'text-center'">
+        <ng-template ngx-datatable-cell-template let-row="row">
+          <button class="btn btn-sm btn-success" (click)="descargarDoc(row.id, row.nombre_original_pdf)">
+            <i class="fa fa-download"></i>
           </button>
-        </div>
-      </div>
+        </ng-template>
+      </ngx-datatable-column>
 
-      <!-- Tabla general antes de hacer búsqueda -->
-      <div
-        *ngIf="mostrarTablaGeneral && documentosFacultades.length > 0"
-        class="mt-4"
-      >
-        <h5 class="mb-3">Documentos por Facultad</h5>
+    </ngx-datatable>
+  </div>
 
-        <ngx-datatable
-          class="bootstrap"
-          [rows]="documentosFacultades"
-          [columnMode]="'force'"
-          [headerHeight]="50"
-          [footerHeight]="50"
-          [rowHeight]="'auto'"
-          [scrollbarH]="scrollBarHorizontal"
-        >
-          <ngx-datatable-column name="Nombre" [width]="250">
-            <ng-template let-row="row" ngx-datatable-cell-template>
-              <span class="truncate-cell" [title]="row.nombre">
-                {{ row.nombre }}
-              </span>
-            </ng-template>
-          </ngx-datatable-column>
-
-          <ngx-datatable-column name="Número">
-            <ng-template let-row="row" ngx-datatable-cell-template>
-              {{ row.num_anio }}
-            </ng-template>
-          </ngx-datatable-column>
-
-          <ngx-datatable-column name="Facultad" [width]="200">
-            <ng-template let-row="row" ngx-datatable-cell-template>
-              <span class="truncate-cell" [title]="row.oficina_remitente">
-                {{ row.oficina_remitente }}
-              </span>
-            </ng-template>
-          </ngx-datatable-column>
-
-          <ngx-datatable-column name="Fecha">
-            <ng-template let-row="row" ngx-datatable-cell-template>
-              {{ row.fecha_doc }}
-            </ng-template>
-          </ngx-datatable-column>
-
-          <ngx-datatable-column name="Archivo PDF" [width]="350">
-            <ng-template let-row="row" ngx-datatable-cell-template>
-              <span class="truncate-pdf" [title]="row.nombre_original_pdf">
-                {{ row.nombre_original_pdf || "No disponible" }}
-              </span>
-            </ng-template>
-          </ngx-datatable-column>
-
-          <ngx-datatable-column
-            name="Acciones"
-            [sortable]="false"
-            [canAutoResize]="false"
-            [width]="150"
-            [headerClass]="'text-center'"
-          >
-            <ng-template let-row="row" ngx-datatable-cell-template>
-              <div class="d-flex justify-content-center align-items-center">
-                <button
-                  class="btn btn-sm btn-primary me-1"
-                  (click)="descargarDoc(row.id, row.nombre_original_pdf)"
-                >
-                  <i class="fa fa-download"></i>
-                </button>
-              </div>
-            </ng-template>
-          </ngx-datatable-column>
-        </ngx-datatable>
-      </div>
-
-      <div
-        *ngIf="loadingIndicator"
-        class="d-flex justify-content-center align-items-center"
-        style="height: 200px"
-      >
-        <div
-          class="spinner-border text-primary"
-          role="status"
-          style="width: 3rem; height: 3rem"
-        >
-          <span class="visually-hidden">Cargando...</span>
-        </div>
-      </div>
-
-      <div *ngIf="!loadingIndicator && dataLoaded">
-        <div *ngIf="rows.length > 0; else noDataTemplate">
-          <!-- Aquí va la tabla ngx-datatable y paginación -->
-        </div>
-      </div>
-
-      <div *ngIf="dataLoaded; else initialMessage">
-        <div *ngIf="rows.length > 0; else noDataTemplate">
-          <ngx-datatable
-            #table
-            class="bootstrap"
-            [rows]="rows"
-            [columns]="[]"
-            [columnMode]="'standard'"
-            [headerHeight]="50"
-            [footerHeight]="50"
-            [rowHeight]="'auto'"
-            [scrollbarH]="scrollBarHorizontal"
-            [count]="totalItems"
-            [limit]="itemsPorPagina"
-            [offset]="paginaActual - 1"
-            (page)="onPageChange($event)"
-            (sort)="onSort($event)"
-          >
-            <ngx-datatable-column name="Nombre" [width]="250">
-              <ng-template let-row="row" ngx-datatable-cell-template>
-                <span class="truncate-cell" [title]="row.nombre">
-                  {{ row.nombre }}
-                </span>
-              </ng-template>
-            </ngx-datatable-column>
-
-            <ngx-datatable-column name="Número" [sortable]="true">
-              <ng-template let-row="row" ngx-datatable-cell-template>
-                {{ row.num_anio }}
-              </ng-template>
-            </ngx-datatable-column>
-
-            <ngx-datatable-column name="Facultad" [width]="200">
-              <ng-template let-row="row" ngx-datatable-cell-template>
-                <span class="truncate-cell" [title]="row.oficina_remitente">
-                  {{ row.oficina_remitente }}
-                </span>
-              </ng-template>
-            </ngx-datatable-column>
-
-            <ngx-datatable-column name="Resumen">
-              <ng-template let-row="row" ngx-datatable-cell-template>
-                <span class="truncate-cell" [title]="row.resumen">
-                  {{ row.resumen }}
-                </span>
-              </ng-template>
-            </ngx-datatable-column>
-
-            <ngx-datatable-column name="Fecha" [sortable]="true">
-              <ng-template let-row="row" ngx-datatable-cell-template>
-                {{ row.fecha_doc }}
-              </ng-template>
-            </ngx-datatable-column>
-
-            <!-- <ngx-datatable-column name="Archivo PDF" [width]="350">
-                  <ng-template let-row="row" ngx-datatable-cell-template>
-                    <span
-                      class="truncate-pdf"
-                      [title]="row.nombre_original_pdf"
-                    >
-                      {{ row.nombre_original_pdf || "No disponible" }}
-                    </span>
-                  </ng-template>
-                </ngx-datatable-column> -->
-
-            <ngx-datatable-column
-              name="Acciones"
-              [sortable]="false"
-              [canAutoResize]="false"
-              [width]="150"
-              [headerClass]="'text-center'"
-            >
-              <ng-template let-row="row" ngx-datatable-cell-template>
-                <div class="d-flex justify-content-center align-items-center">
-                  <button
-                    class="btn btn-sm btn-primary me-1"
-                    (click)="descargarDoc(row.id, row.nombre_original_pdf)"
-                  >
-                    <i class="fa fa-download"></i>
-                  </button>
-                </div>
-              </ng-template>
-            </ngx-datatable-column>
-          </ngx-datatable>
-
-          <nav *ngIf="total_paginas > 1" aria-label="Page navigation">
-            <ul class="pagination justify-content-center mt-3">
-              <!-- Botón anterior -->
-              <li class="page-item" [class.disabled]="paginaActual === 1">
-                <button
-                  class="page-link"
-                  (click)="
-                    paginaActual > 1 && buscarDocumento(paginaActual - 1)
-                  "
-                >
-                  &laquo;
-                </button>
-              </li>
-
-              <!-- Generar páginas con puntos suspensivos -->
-              <li
-                *ngFor="let page of getPaginasParaMostrar()"
-                class="page-item"
-                [class.active]="page === paginaActual"
-                [class.disabled]="page === '...'"
-              >
-                <button
-                  class="page-link"
-                  [disabled]="page === '...'"
-                  (click)="page !== '...' && buscarDocumento(+page)"
-                >
-                  {{ page }}
-                </button>
-              </li>
-
-              <!-- Botón siguiente -->
-              <li
-                class="page-item"
-                [class.disabled]="paginaActual === total_paginas"
-              >
-                <button
-                  class="page-link"
-                  (click)="
-                    paginaActual < total_paginas &&
-                      buscarDocumento(paginaActual + 1)
-                  "
-                >
-                  &raquo;
-                </button>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </div>
-
-      <ng-template #initialMessage>
-        <p>Por favor ingrese un término de búsqueda y haga clic en Buscar.</p>
-      </ng-template>
-
-      <ng-template #noDataTemplate>
-        <p>No se encontraron coincidencias.</p>
-      </ng-template>
+  <!-- Indicador de carga -->
+  <div *ngIf="loadingIndicator" class="d-flex justify-content-center my-5">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Cargando…</span>
     </div>
   </div>
-</div>
+
+  <!-- Segunda tabla: resultados paginados -->
+  <ng-container *ngIf="dataLoaded && rows.length; else noDataTemplate">
+    <ngx-datatable
+      #table
+      class="bootstrap"
+      [rows]="rows"
+      [count]="totalItems"
+      [limit]="itemsPorPagina"
+      [offset]="paginaActual - 1"
+      columnMode="force"
+      [headerHeight]="50"
+      [footerHeight]="50"
+      [rowHeight]="'auto'"
+      [scrollbarH]="scrollBarHorizontal"
+      (page)="onPageChange($event)"
+      (sort)="onSort($event)">
+      
+      <ngx-datatable-column name="Nombre" [flexGrow]="3" [minWidth]="150">
+        <ng-template ngx-datatable-cell-template let-row="row">
+          <span class="truncate-cell" [title]="row.nombre">{{ row.nombre }}</span>
+        </ng-template>
+      </ngx-datatable-column>
+      
+      <ngx-datatable-column name="Número" [flexGrow]="1" [minWidth]="80">
+        <ng-template ngx-datatable-cell-template let-row="row">
+          {{ row.num_anio }}
+        </ng-template>
+      </ngx-datatable-column>
+      
+      <ngx-datatable-column name="Facultad" [flexGrow]="2" [minWidth]="120">
+        <ng-template ngx-datatable-cell-template let-row="row">
+          {{ row.oficina_remitente }}
+        </ng-template>
+      </ngx-datatable-column>
+      
+      <ngx-datatable-column
+        name="Fecha"
+        [flexGrow]="0"
+        [minWidth]="70"
+        [headerClass]="'text-center'"
+        [cellClass]="'text-center'">
+        <ng-template ngx-datatable-cell-template let-row="row">
+          {{ row.fecha_doc }}
+        </ng-template>
+      </ngx-datatable-column>
+      
+      <ngx-datatable-column
+        name="Acciones"
+        [sortable]="false"
+        [flexGrow]="0"
+        [minWidth]="50"
+        [headerClass]="'text-center'"
+        [cellClass]="'text-center'">
+        <ng-template ngx-datatable-cell-template let-row="row">
+          <button class="btn btn-sm btn-success" (click)="descargarDoc(row.id, row.nombre_original_pdf)">
+            <i class="fa fa-download"></i>
+          </button>
+        </ng-template>
+      </ngx-datatable-column>
+      
+    </ngx-datatable>
+
+    <!-- Paginación -->
+    <nav *ngIf="total_paginas > 1" class="mt-3">
+      <ul class="pagination justify-content-center mb-0">
+        <li class="page-item" [class.disabled]="paginaActual === 1">
+          <button class="page-link" (click)="buscarDocumento(paginaActual - 1)">&laquo;</button>
+        </li>
+        <li *ngFor="let page of getPaginasParaMostrar()" class="page-item"
+            [class.active]="page === paginaActual" [class.disabled]="page === '...'">
+          <button class="page-link" [disabled]="page==='...'" (click)="buscarDocumento(+page)">{{ page }}</button>
+        </li>
+        <li class="page-item" [class.disabled]="paginaActual === total_paginas">
+          <button class="page-link" (click)="buscarDocumento(paginaActual + 1)">&raquo;</button>
+        </li>
+      </ul>
+    </nav>
+  </ng-container>
+
+  <ng-template #noDataTemplate>
+    <p class="mt-3">No se encontraron coincidencias.</p>
+  </ng-template>
+</section>

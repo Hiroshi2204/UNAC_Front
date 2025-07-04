@@ -1,12 +1,18 @@
-:host {
-  display: block;
-  position: static !important;   /* nada de fixed/sticky */
-  width: 100%;
-  margin: 0;                     /* sin márgenes externos */
+/* -------- Top-bar personalizado -------- */
+.topbar {
+  background-color: #276CAA !important;   // azul deseado
+  /* Si quieres transiciones suaves al hacer hover o cambiar de modo: */
+  transition: background-color .3s ease-in-out;
 }
 
-.topbar {
-  background: #2072ba;
-  padding-left: 0 !important;    /* ✅ quita cualquier sangría */
-  padding-right: 0 !important;
+/* Ajustes que ya tenías  — déjalos si los necesitas */
+.navbar {
+  position: static !important;
+  left: 0 !important;
+  padding-left: 0 !important;
+}
+
+body {
+  padding-left: 0 !important;
+  /* padding-top: 56px;  // solo si usas fixed-top */
 }

@@ -56,6 +56,15 @@ export class VistaFacultadesComponent implements OnInit {
       this.usuario_admin = usuario?.rol?.rol === 'ADMIN';
     }
 
+
+    this.listar_documentosFacultades();
+
+    
+  }
+
+
+  listar_documentosFacultades() {
+
     this.docService.getDocumentosFacultades().subscribe({
       next: (res) => {
         this.documentosFacultades = (res.documentos || [])
@@ -77,6 +86,14 @@ export class VistaFacultadesComponent implements OnInit {
         console.error('Error al obtener documentos por facultad', err);
       }
     });
+
+
+  }
+
+  get_documentosFacultades() {
+
+
+    
   }
 
   getOficinas() {

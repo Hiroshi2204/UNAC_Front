@@ -1,53 +1,34 @@
-:host {
-  display: block;
-}
+/* Ruta al JPG en assets (sin "~")  */
+$banner-img: url('/assets/images/vistas-publico/header.jpg');
 
-.hero {
+/* --- Banner base --- */
+.banner {
   position: relative;
-  width: 100%;
-  height: var(--hero-h, 220px);
-
-  /* Imagen de fondo */
-  background-image: var(--hero-bg);
+  background-image: $banner-img;
   background-size: cover;
-  background-position: center center;
+  background-position: center;
+  min-height: clamp(200px, 35vw, 320px); /* responsive */
+  display: flex;
+  align-items: center;
+  color: #fff;
+  overflow: hidden;     /* recorta overlay */
 
-  /* Degradado azul semitransparente por encima de la foto */
-  &::before {
+  /* Overlay azul oscuro semitransparente */
+  &__overlay {
     content: '';
     position: absolute;
     inset: 0;
-    background: rgba(11, 96, 175, 0.75); /* mismo azul que Topbar */
+    background: rgba(0, 46, 102, 0.65);
+    z-index: 0;
   }
 }
 
-/* Contenido centrado sobre la superposición azul */
-.hero__content {
-  position: relative;          /* crea nuevo stacking context encima del ::before */
-  width: 100%;
-  height: 100%;
+/* Breadcrumb en blanco con separador tenue */
+.breadcrumb {
+  --bs-breadcrumb-divider-color: rgba(255, 255, 255, .7);
+  --bs-breadcrumb-item-active-color: #fff;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  text-align: center;
-  padding: 0 1rem;
-}
-
-/* Título grande y responsive */
-.hero__title {
-  color: #ffffff;
-  font-weight: 600;
-  font-size: clamp(1.75rem, 4vw + 0.5rem, 2.5rem);
-  line-height: 1.2;
-  margin: 0;
-}
-
-/* ——— Pequeños ajustes responsive ——— */
-@media (max-width: 480px) {
-  .hero {
-    height: calc(var(--hero-h) - 40px); /* un poco menos alta en móvil estrecho */
+  a {
+    color: #dbe8ff;
   }
 }

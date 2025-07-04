@@ -1,20 +1,16 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink, ActivatedRoute } from '@angular/router';
+interface Crumb { label: string; url: string; }
 
 @Component({
   selector: 'app-banner',
-  imports: [],
+  imports: [RouterLink, CommonModule], 
   templateUrl: './banner.component.html',
   styleUrl: './banner.component.scss'
 })
 export class BannerComponent {
 
-   @Input({ required: true }) title!: string;
-
-  /** Ruta de la imagen de fondo */
-  @Input() image = '/assets/img/hero-default.jpg';
-
-  /** Altura opcional, por si una página la necesita más baja/alta */
-  @Input() height = '220px';
-
+  @Input() titulo = 'Título por defecto';
+  @Input() breadcrumbs: Crumb[] = [];
 }

@@ -1,0 +1,35 @@
+.aside-static {
+  width: 280px;
+  /* crece con el documento */
+  height: auto;
+  min-height: 100%;
+  position: static;     // vuelve al flujo normal
+  overflow: visible;
+  border-right: 1px solid #f2f4f9;
+  box-shadow: 0 8px 10px 0 rgba(183, 192, 206, 0.15);
+
+  /* Links */
+  .sidebar-link {
+    color: #6c757d;
+    padding: 0.4rem 0;
+    border-bottom: 2px solid transparent;
+    font-size: .925rem;
+    transition: color .15s, border-color .15s;
+
+    &:hover { color: #0d6efd; }
+    &.active,
+    &.router-link-active {
+      color: #0d6efd;
+      border-bottom-color: #34b3d6;
+    }
+  }
+}
+
+
+.pte-logo {
+  height: 32px;           // móvil
+}
+
+@media (min-width: 768px) { // md
+  .pte-logo { height: 40px; }
+}

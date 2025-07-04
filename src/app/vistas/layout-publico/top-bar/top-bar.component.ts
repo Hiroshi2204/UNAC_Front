@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-top-bar',
   imports: [CommonModule],
   templateUrl: './top-bar.component.html',
-  styleUrls: ['./top-bar.component.scss']
+  styleUrl: './top-bar.component.scss'
 })
 export class TopBarComponent {
 

@@ -1,0 +1,34 @@
+<header class="banner">
+  <!-- Capa azul translúcida -->
+  <span class="banner__overlay"></span>
+
+  <!-- Contenido -->
+  <div class="container position-relative z-1 text-white py-5">
+    <h1 class="display-4 fw-bold mb-2">{{ titulo }}</h1>
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item">
+          <a routerLink="/" class="link-light text-decoration-none">Home</a>
+        </li>
+
+        <li *ngFor="let crumb of breadcrumbs; let last = last"
+            class="breadcrumb-item"
+            [class.active]="last"
+            [attr.aria-current]="last ? 'page' : null">
+
+          <ng-container *ngIf="!last">
+            <a [routerLink]="crumb.url"
+               class="link-light text-decoration-none">
+              {{ crumb.label }}
+            </a>
+          </ng-container>
+
+          <ng-container *ngIf="last">
+            {{ crumb.label }}
+          </ng-container>
+        </li>
+      </ol>
+    </nav>
+  </div>
+</header>
