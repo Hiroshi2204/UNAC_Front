@@ -18,3 +18,27 @@
 :host ::ng-deep ngx-datatable.bootstrap .datatable-body-cell {
   border: 1px solid black !important;
 }
+
+
+/* Para la columna de Acciones */
+:host ::ng-deep .col-acciones .datatable-body-cell,
+:host ::ng-deep .col-acciones .datatable-header-cell {
+  width: 80px !important;
+  min-width: 80px !important;
+  max-width: 80px !important;
+  flex: 0 0 80px !important;
+  
+  /* --- LÍNEAS AÑADIDAS PARA CENTRAR --- */
+  text-align: center !important;
+  justify-content: center !important;
+}
+
+/* Esta regla ya estaba correcta, la dejo como referencia */
+:host ::ng-deep .col-fecha .datatable-body-cell,
+:host ::ng-deep .col-fecha .datatable-header-cell {
+  width: 110px !important;
+  min-width: 110px !important;
+  max-width: 110px !important;
+  flex: 0 0 110px !important;
+  text-align: center;
+}

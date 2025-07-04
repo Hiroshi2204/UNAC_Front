@@ -55,7 +55,6 @@
     </div>
   </div>
 
-  <!-- Primera tabla: Documentos por Facultad -->
   <div *ngIf="mostrarTablaGeneral && documentosFacultades.length" class="mt-5">
     <h5>Documentos por Facultad</h5>
     <ngx-datatable
@@ -66,20 +65,20 @@
       [footerHeight]="50"
       [rowHeight]="'auto'"
       [scrollbarH]="scrollBarHorizontal">
-      
-      <ngx-datatable-column name="Nombre" [flexGrow]="3" [minWidth]="150">
+
+      <ngx-datatable-column name="Nombre" [flexGrow]="4">
         <ng-template ngx-datatable-cell-template let-row="row">
           <span class="truncate-cell" [title]="row.nombre">{{ row.nombre }}</span>
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column name="Número" [flexGrow]="1" [minWidth]="80">
+      <ngx-datatable-column name="Número" [flexGrow]="0">
         <ng-template ngx-datatable-cell-template let-row="row">
           {{ row.num_anio }}
         </ng-template>
       </ngx-datatable-column>
 
-      <ngx-datatable-column name="Facultad" [flexGrow]="2" [minWidth]="120">
+      <ngx-datatable-column name="Facultad" [flexGrow]="0">
         <ng-template ngx-datatable-cell-template let-row="row">
           {{ row.oficina_remitente }}
         </ng-template>
@@ -87,8 +86,7 @@
 
       <ngx-datatable-column
         name="Fecha"
-        [flexGrow]="0"
-        [minWidth]="70"
+        [width]="100"
         [headerClass]="'text-center'"
         [cellClass]="'text-center'">
         <ng-template ngx-datatable-cell-template let-row="row">
@@ -99,7 +97,6 @@
       <ngx-datatable-column
         name="Acciones"
         [sortable]="false"
-        [flexGrow]="0"
         [width]="50"
         [headerClass]="'text-center'"
         [cellClass]="'text-center'">
@@ -111,17 +108,9 @@
       </ngx-datatable-column>
 
     </ngx-datatable>
-  </div>
+</div>
 
-  <!-- Indicador de carga -->
-  <div *ngIf="loadingIndicator" class="d-flex justify-content-center my-5">
-    <div class="spinner-border" role="status">
-      <span class="visually-hidden">Cargando…</span>
-    </div>
-  </div>
-
-  <!-- Segunda tabla: resultados paginados -->
-  <ng-container *ngIf="dataLoaded && rows.length; else noDataTemplate">
+<ng-container *ngIf="dataLoaded && rows.length; else noDataTemplate">
     <ngx-datatable
       #table
       class="bootstrap"
@@ -136,20 +125,20 @@
       [scrollbarH]="scrollBarHorizontal"
       (page)="onPageChange($event)"
       (sort)="onSort($event)">
-      
-      <ngx-datatable-column name="Nombre" [flexGrow]="3" [minWidth]="150">
+
+      <ngx-datatable-column name="Nombre" [flexGrow]="4">
         <ng-template ngx-datatable-cell-template let-row="row">
           <span class="truncate-cell" [title]="row.nombre">{{ row.nombre }}</span>
         </ng-template>
       </ngx-datatable-column>
       
-      <ngx-datatable-column name="Número" [flexGrow]="1" [minWidth]="80">
+      <ngx-datatable-column name="Número" [flexGrow]="1.5">
         <ng-template ngx-datatable-cell-template let-row="row">
           {{ row.num_anio }}
         </ng-template>
       </ngx-datatable-column>
       
-      <ngx-datatable-column name="Facultad" [flexGrow]="2" [minWidth]="120">
+      <ngx-datatable-column name="Facultad" [flexGrow]="2">
         <ng-template ngx-datatable-cell-template let-row="row">
           {{ row.oficina_remitente }}
         </ng-template>
@@ -157,8 +146,7 @@
       
       <ngx-datatable-column
         name="Fecha"
-        [flexGrow]="0"
-        [minWidth]="70"
+        [width]="120"
         [headerClass]="'text-center'"
         [cellClass]="'text-center'">
         <ng-template ngx-datatable-cell-template let-row="row">
@@ -169,8 +157,7 @@
       <ngx-datatable-column
         name="Acciones"
         [sortable]="false"
-        [flexGrow]="0"
-        [minWidth]="50"
+        [width]="90"
         [headerClass]="'text-center'"
         [cellClass]="'text-center'">
         <ng-template ngx-datatable-cell-template let-row="row">
@@ -181,23 +168,7 @@
       </ngx-datatable-column>
       
     </ngx-datatable>
-
-    <!-- Paginación -->
-    <nav *ngIf="total_paginas > 1" class="mt-3">
-      <ul class="pagination justify-content-center mb-0">
-        <li class="page-item" [class.disabled]="paginaActual === 1">
-          <button class="page-link" (click)="buscarDocumento(paginaActual - 1)">&laquo;</button>
-        </li>
-        <li *ngFor="let page of getPaginasParaMostrar()" class="page-item"
-            [class.active]="page === paginaActual" [class.disabled]="page === '...'">
-          <button class="page-link" [disabled]="page==='...'" (click)="buscarDocumento(+page)">{{ page }}</button>
-        </li>
-        <li class="page-item" [class.disabled]="paginaActual === total_paginas">
-          <button class="page-link" (click)="buscarDocumento(paginaActual + 1)">&raquo;</button>
-        </li>
-      </ul>
-    </nav>
-  </ng-container>
+    </ng-container>
 
   <ng-template #noDataTemplate>
     <p class="mt-3">No se encontraron coincidencias.</p>
